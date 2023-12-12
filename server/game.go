@@ -7,10 +7,12 @@ import (
 
 func main() {
 	tt := Testtube{4, []string{"red", "green"}}
-	fmt.Println(tt)
-	err := tt.AddColor("green")
+	tt2 := Testtube{4, []string{"red", "green"}}
+	level := GameLevel{1, []Testtube{tt, tt2}}
+	fmt.Println(level)
+	_, err := level.Pour(0, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(tt)
+	fmt.Println(level)
 }

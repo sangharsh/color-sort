@@ -6,8 +6,8 @@ type GameLevel struct {
 }
 
 func (level *GameLevel) Pour(srcidx, dstidx int) (bool, error) {
-	src := level.tubes[srcidx]
-	dst := level.tubes[dstidx]
+	src := &level.tubes[srcidx]
+	dst := &level.tubes[dstidx]
 	color, err := src.Peek()
 	if err != nil {
 		return false, err

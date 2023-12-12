@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-// func (level *GameLevel) Pour(srcidx, dstidx int) (bool, error) {
 func TestPourValid(t *testing.T) {
 	level := GameLevel{1, []Testtube{Testtube{4, []string{"red", "green"}}, Testtube{4, []string{"red", "green"}}}}
 
@@ -12,6 +12,7 @@ func TestPourValid(t *testing.T) {
 	if err != nil {
 		t.Fatalf(`Unable to pour. Level: %v \n Error: %v`, level, err)
 	}
+	assert.Equal(t, []string{"red", "green", "green"}, level.tubes[1].colors, "Tube colors should match")
 }
 
 func TestPourNonMatching(t *testing.T) {
