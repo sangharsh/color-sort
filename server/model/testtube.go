@@ -55,11 +55,11 @@ func (tt *Testtube) Pop() (string, error) {
 }
 
 func (tt *Testtube) AddColor(color string) error {
+	if len(tt.colors) > 0 && tt.colors[len(tt.colors)-1] != color {
+		return errors.New("color not matching")
+	}
 	if len(tt.colors) == tt.size {
 		return errors.New("tt is full")
-	}
-	if tt.colors[len(tt.colors)-1] != color {
-		return errors.New("color not matching")
 	}
 	tt.colors = append(tt.colors, color)
 	return nil
