@@ -1,8 +1,14 @@
-package main
+package model
 
 type GameLevel struct {
 	level int
 	tubes []Testtube
+}
+
+
+func NewGameLevel(level int, tubes []Testtube) (*GameLevel) {
+	tubes2 := append(tubes, Testtube{4, []string{}}, Testtube{4, []string{}})
+	return &GameLevel{level, tubes2}
 }
 
 func (level *GameLevel) Pour(srcidx, dstidx int) (bool, error) {

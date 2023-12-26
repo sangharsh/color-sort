@@ -1,4 +1,4 @@
-module example.com/color-sort-go
+module github.com/sangharsh/color-sort
 
 go 1.20
 

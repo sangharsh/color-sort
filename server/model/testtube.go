@@ -1,4 +1,4 @@
-package main
+package model
 
 import (
 	"errors"
@@ -9,6 +9,10 @@ type Testtube struct {
 	size int
 	// TODO: Use stack data structure
 	colors []string
+}
+
+func NewTesttube(size int, colors []string) *Testtube {
+	return &Testtube{size, colors}
 }
 
 func (tt Testtube) IsEmpty() bool {

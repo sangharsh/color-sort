@@ -3,16 +3,18 @@ package main
 import (
 	"fmt"
 	"log"
+	"github.com/sangharsh/color-sort/model"
 )
 
 func main() {
-	tt := Testtube{4, []string{"red", "green"}}
-	tt2 := Testtube{4, []string{"red", "green"}}
-	level := GameLevel{1, []Testtube{tt, tt2}}
-	fmt.Println(level)
-	_, err := level.Pour(0, 1)
+	tt := model.NewTesttube(4, []string{"red", "green"})
+	tt2 := model.NewTesttube(4, []string{"red", "green"})
+	gameLevel := model.NewGameLevel(1, []model.Testtube{*tt, *tt2})
+	fmt.Println(gameLevel)
+	_, err := gameLevel.Pour(0, 1)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(level)
+	fmt.Println(gameLevel)
+	fmt.Println("Won: ", gameLevel.Won())
 }
