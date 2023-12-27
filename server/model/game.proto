@@ -23,3 +23,11 @@ message GameLevel {
     int32 level = 1;
     repeated Testtube tubes = 2;
 }
+
+message LevelRequest {
+    int32 level = 1;
+}
+
+service ColorSortApi {
+    rpc GetGameLevel(LevelRequest) returns (GameLevel) {}
+}
