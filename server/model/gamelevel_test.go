@@ -15,7 +15,7 @@ func TestPourValid(t *testing.T) {
 
 	_, err := level.Pour(0, 1)
 	if err != nil {
-		t.Fatalf(`Unable to pour. Level: %v \n Error: %v`, level, err)
+		t.Fatalf(`Unable to pour. Level: %v \n Error: %v`, &level, err)
 	}
 	assert.Equal(t, []Color{Color_RED, Color_GREEN, Color_GREEN}, level.GetTubes()[1].GetColors(), "Tube colors should match")
 }
@@ -60,6 +60,10 @@ func TestGamePlay(t *testing.T) {
 		1,
 		[]*Testtube{{Size: 4, Colors: []Color{Color_RED, Color_GREEN, Color_RED, Color_GREEN}}, {Size: 4, Colors: []Color{Color_RED, Color_GREEN, Color_RED, Color_GREEN}}},
 	)
+
+	if level.Won() {
+		t.Fatalf(`Game won. Level: %v`, &level)
+	}
 
 	solve := [][]int{{0, 2}, {0, 3}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {1, 2}, {1, 3}}
 
