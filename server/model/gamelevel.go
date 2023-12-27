@@ -5,8 +5,7 @@ type GameLevel struct {
 	tubes []Testtube
 }
 
-
-func NewGameLevel(level int, tubes []Testtube) (*GameLevel) {
+func NewGameLevel(level int, tubes []Testtube) *GameLevel {
 	tubes2 := append(tubes, Testtube{4, []string{}}, Testtube{4, []string{}})
 	return &GameLevel{level, tubes2}
 }

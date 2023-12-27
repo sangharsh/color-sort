@@ -46,13 +46,13 @@ func TestGamePlay(t *testing.T) {
 	tt := NewTesttube(4, []string{"red", "green", "red", "green"})
 	tt2 := NewTesttube(4, []string{"red", "green", "red", "green"})
 	gameLevel := NewGameLevel(1, []Testtube{*tt, *tt2})
-	solve := [][]int{{0,2}, {0,3}, {0,2}, {0,3}, {1,2}, {1,3}, {1,2}, {1,3}}
+	solve := [][]int{{0, 2}, {0, 3}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {1, 2}, {1, 3}}
 
 	for _, move := range solve {
 		_, err := gameLevel.Pour(move[0], move[1])
 		if err != nil {
 			t.Fatalf(`Unable to pour. Error: %v`, err)
-		}	
+		}
 	}
 
 	if !gameLevel.Won() {
