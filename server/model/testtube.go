@@ -2,65 +2,61 @@ package model
 
 import (
 	"errors"
-	//"github.com/golang-collections/collections/stack"
 )
 
-type Testtube struct {
-	size int
-	// TODO: Use stack data structure
-	colors []string
+func NewTesttube(size int, colors []Color) *Testtube {
+	return &Testtube{
+		Size:   int32(size),
+		Colors: colors,
+	}
 }
 
-func NewTesttube(size int, colors []string) *Testtube {
-	return &Testtube{size, colors}
+func (tt *Testtube) IsEmpty() bool {
+	return len(tt.GetColors()) == 0
 }
 
-func (tt Testtube) IsEmpty() bool {
-	return len(tt.colors) == 0
+func (tt *Testtube) IsFull() bool {
+	return int32(len(tt.GetColors())) == tt.GetSize()
 }
 
-func (tt Testtube) IsFull() bool {
-	return len(tt.colors) == tt.size
-}
-
-func (tt Testtube) IsComplete() bool {
+func (tt *Testtube) IsComplete() bool {
 	if tt.IsEmpty() {
 		return true
 	}
 	if !tt.IsFull() {
 		return false
 	}
-	for _, e := range tt.colors {
-		if e != tt.colors[0] {
+	for _, e := range tt.GetColors() {
+		if e != tt.GetColors()[0] {
 			return false
 		}
 	}
 	return true
 }
 
-func (tt Testtube) Peek() (string, error) {
-	if len(tt.colors) == 0 {
-		return "", errors.New("tt is empty")
+func (tt *Testtube) Peek() (Color, error) {
+	if len(tt.GetColors()) == 0 {
+		return Color_BLANK, errors.New("tt is empty")
 	}
-	return tt.colors[len(tt.colors)-1], nil
+	return tt.GetColors()[len(tt.GetColors())-1], nil
 }
 
-func (tt *Testtube) Pop() (string, error) {
-	if len(tt.colors) == 0 {
-		return "", errors.New("tt is empty")
+func (tt *Testtube) Pop() (Color, error) {
+	if len(tt.GetColors()) == 0 {
+		return Color_BLANK, errors.New("tt is empty")
 	}
-	color := tt.colors[len(tt.colors)-1]
-	tt.colors = tt.colors[:len(tt.colors)-1]
+	color := tt.GetColors()[len(tt.GetColors())-1]
+	tt.Colors = tt.GetColors()[:len(tt.GetColors())-1]
 	return color, nil
 }
 
-func (tt *Testtube) AddColor(color string) error {
-	if len(tt.colors) > 0 && tt.colors[len(tt.colors)-1] != color {
+func (tt *Testtube) AddColor(color Color) error {
+	if len(tt.Colors) > 0 && tt.Colors[len(tt.Colors)-1] != color {
 		return errors.New("color not matching")
 	}
-	if len(tt.colors) == tt.size {
+	if len(tt.Colors) == int(tt.GetSize()) {
 		return errors.New("tt is full")
 	}
-	tt.colors = append(tt.colors, color)
+	tt.Colors = append(tt.Colors, color)
 	return nil
 }

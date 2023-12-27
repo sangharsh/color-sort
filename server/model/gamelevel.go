@@ -1,18 +1,17 @@
 package model
 
-type GameLevel struct {
-	level int
-	tubes []Testtube
-}
-
-func NewGameLevel(level int, tubes []Testtube) *GameLevel {
-	tubes2 := append(tubes, Testtube{4, []string{}}, Testtube{4, []string{}})
-	return &GameLevel{level, tubes2}
+func NewGameLevel(level int, tubes []*Testtube) *GameLevel {
+	tubes2 := append(tubes, &Testtube{Size: 4, Colors: []Color{}}, &Testtube{Size: 4, Colors: []Color{}})
+	gameLevel := &GameLevel{
+		Level: 0,
+		Tubes: tubes2,
+	}
+	return gameLevel
 }
 
 func (level *GameLevel) Pour(srcidx, dstidx int) (bool, error) {
-	src := &level.tubes[srcidx]
-	dst := &level.tubes[dstidx]
+	src := level.Tubes[srcidx]
+	dst := level.Tubes[dstidx]
 	color, err := src.Peek()
 	if err != nil {
 		return false, err
@@ -29,8 +28,8 @@ func (level *GameLevel) Pour(srcidx, dstidx int) (bool, error) {
 	return true, nil
 }
 
-func (level GameLevel) Won() bool {
-	for _, tt := range level.tubes {
+func (level *GameLevel) Won() bool {
+	for _, tt := range level.GetTubes() {
 		if !tt.IsComplete() {
 			return false
 		}
