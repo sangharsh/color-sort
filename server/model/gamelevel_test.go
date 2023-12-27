@@ -6,7 +6,7 @@ import (
 )
 
 func TestPourValid(t *testing.T) {
-	level := GameLevel{1, []Testtube{Testtube{4, []string{"red", "green"}}, Testtube{4, []string{"red", "green"}}}}
+	level := GameLevel{1, []Testtube{{4, []string{"red", "green"}}, {4, []string{"red", "green"}}}}
 
 	_, err := level.Pour(0, 1)
 	if err != nil {
@@ -16,7 +16,7 @@ func TestPourValid(t *testing.T) {
 }
 
 func TestPourNonMatching(t *testing.T) {
-	level := GameLevel{1, []Testtube{Testtube{4, []string{"red", "blue"}}, Testtube{2, []string{"red", "green"}}}}
+	level := GameLevel{1, []Testtube{{4, []string{"red", "blue"}}, {2, []string{"red", "green"}}}}
 
 	_, err := level.Pour(0, 1)
 	if err == nil {
@@ -25,7 +25,7 @@ func TestPourNonMatching(t *testing.T) {
 }
 
 func TestPourDstFull(t *testing.T) {
-	level := GameLevel{1, []Testtube{Testtube{4, []string{"red", "green"}}, Testtube{2, []string{"red", "green"}}}}
+	level := GameLevel{1, []Testtube{{4, []string{"red", "green"}}, {2, []string{"red", "green"}}}}
 
 	_, err := level.Pour(0, 1)
 	if err == nil {
@@ -34,7 +34,7 @@ func TestPourDstFull(t *testing.T) {
 }
 
 func TestPourSrcEmpty(t *testing.T) {
-	level := GameLevel{1, []Testtube{Testtube{4, []string{}}, Testtube{2, []string{"red", "green"}}}}
+	level := GameLevel{1, []Testtube{{4, []string{}}, {2, []string{"red", "green"}}}}
 
 	_, err := level.Pour(0, 1)
 	if err == nil {
