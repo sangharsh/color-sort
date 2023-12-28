@@ -1,7 +1,6 @@
 package model
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -68,7 +67,6 @@ func TestGamePlay(t *testing.T) {
 	solve := [][]int{{0, 2}, {0, 3}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {1, 2}, {1, 3}}
 
 	for _, move := range solve {
-		fmt.Printf("Move: %v", move)
 		_, err := level.Pour(move[0], move[1])
 		if err != nil {
 			t.Fatalf(`Unable to pour. Error: %v`, err)
