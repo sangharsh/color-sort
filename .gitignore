@@ -20,8 +20,9 @@
 # Go workspace file
 go.work
 
-# Generate protobuf files
+# Generated protobuf files
 *.pb.go
+*_pb.js
 
 # Node.js, React, Nextjs ignore files 
 node_modules/
