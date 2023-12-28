@@ -21,7 +21,7 @@ func TestIsCompleteDiffColors(t *testing.T) {
 func TestPopEmpty(t *testing.T) {
 	tt := NewTesttube(4, []Color{})
 	_, err := tt.Pop()
-	if  err == nil {
+	if err == nil {
 		t.Fatalf(`Popped empty tt. tt: %v; Error: %v`, tt, err)
 	}
 }

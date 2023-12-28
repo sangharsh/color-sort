@@ -1,9 +1,9 @@
 package model
 
-func NewGameLevel(level int, tubes []*Testtube) *GameLevel {
+func NewGameLevel(level int32, tubes []*Testtube) *GameLevel {
 	tubes2 := append(tubes, &Testtube{Size: 4, Colors: []Color{}}, &Testtube{Size: 4, Colors: []Color{}})
 	gameLevel := &GameLevel{
-		Level: 0,
+		Level: level,
 		Tubes: tubes2,
 	}
 	return gameLevel
