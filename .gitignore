@@ -22,3 +22,7 @@ go.work
 
 # Generate protobuf files
 *.pb.go
+
+# Node.js, React, Nextjs ignore files 
+node_modules/
+.next/
