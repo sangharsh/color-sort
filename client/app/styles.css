@@ -1,0 +1,45 @@
+.container {
+    width: 500px;
+    margin: auto;
+    background-color: #cfe8fc;
+}
+
+.testtube {
+    margin: 20px;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    width: 40px;
+    border-radius: 0px 0px 20px 20px;
+    overflow: hidden;
+    align-items: center;
+    vertical-align: center;
+    display: inline-block;
+    padding-top: 20px;
+}
+
+.liquid {
+    height: 20px;
+    padding: 10px;
+}
+
+.liquid-1 {
+    background-color: red;
+}
+
+.liquid-2 {
+    background-color: green;
+}
+
+.liquid-3 {
+    background-color: blue;
+}
+
+.liquid-4 {
+    background-color: yellow;
+}
+
+.selected {
+    margin-bottom: 40px;
+    margin-top: 0px;
+}
