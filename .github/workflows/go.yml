@@ -35,6 +35,7 @@ jobs:
         go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
     - name: Generating protos
       run: |
+        mkdir -p $GO_DST_DIR
         protoc -I=$SRC_DIR \
         --go_out=$GO_DST_DIR --go_opt=module=github.com/sangharsh/color-sort \
         --go-grpc_out=$GO_DST_DIR --go-grpc_opt=module=github.com/sangharsh/color-sort \
