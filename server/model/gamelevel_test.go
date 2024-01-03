@@ -3,27 +3,34 @@ package model
 import (
 	"testing"
 
+	pb "github.com/sangharsh/color-sort/gen/modelpb"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestPourValid(t *testing.T) {
-	level := GameLevel{
-		Level: 1,
-		Tubes: []*Testtube{{Size: 4, Colors: []Color{Color_RED, Color_GREEN}}, {Size: 4, Colors: []Color{Color_RED, Color_GREEN}}},
-	}
+	level := NewGameLevel(
+		1,
+		[]*pb.Testtube{
+			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN}),
+			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN}),
+		},
+	)
 
 	_, err := level.Pour(0, 1)
 	if err != nil {
 		t.Fatalf(`Unable to pour. Level: %v \n Error: %v`, &level, err)
 	}
-	assert.Equal(t, []Color{Color_RED, Color_GREEN, Color_GREEN}, level.GetTubes()[1].GetColors(), "Tube colors should match")
+	assert.Equal(t, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_GREEN}, level.Glpb.GetTubes()[1].GetColors(), "Tube colors should match")
 }
 
 func TestPourNonMatching(t *testing.T) {
-	level := GameLevel{
-		Level: 1,
-		Tubes: []*Testtube{{Size: 4, Colors: []Color{Color_RED, Color_BLUE}}, {Size: 4, Colors: []Color{Color_RED, Color_GREEN}}},
-	}
+	level := NewGameLevel(
+		1,
+		[]*pb.Testtube{
+			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_BLUE}),
+			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN}),
+		},
+	)
 
 	_, err := level.Pour(0, 1)
 	if err == nil {
@@ -32,10 +39,13 @@ func TestPourNonMatching(t *testing.T) {
 }
 
 func TestPourDstFull(t *testing.T) {
-	level := GameLevel{
-		Level: 1,
-		Tubes: []*Testtube{{Size: 4, Colors: []Color{Color_RED, Color_GREEN}}, {Size: 2, Colors: []Color{Color_RED, Color_GREEN}}},
-	}
+	level := NewGameLevel(
+		1,
+		[]*pb.Testtube{
+			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN}),
+			NewTesttube(2, []pb.Color{pb.Color_RED, pb.Color_GREEN}),
+		},
+	)
 	_, err := level.Pour(0, 1)
 	if err == nil {
 		t.Fatalf(`Able to pour. Level: %v`, &level)
@@ -43,11 +53,13 @@ func TestPourDstFull(t *testing.T) {
 }
 
 func TestPourSrcEmpty(t *testing.T) {
-	level := GameLevel{
-		Level: 1,
-		Tubes: []*Testtube{{Size: 4, Colors: []Color{}}, {Size: 4, Colors: []Color{Color_RED, Color_GREEN}}},
-	}
-
+	level := NewGameLevel(
+		1,
+		[]*pb.Testtube{
+			NewTesttube(4, []pb.Color{}),
+			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN}),
+		},
+	)
 	_, err := level.Pour(0, 1)
 	if err == nil {
 		t.Fatalf(`Able to pour. Level: %v`, &level)
@@ -57,7 +69,10 @@ func TestPourSrcEmpty(t *testing.T) {
 func TestGamePlay(t *testing.T) {
 	level := NewGameLevel(
 		1,
-		[]*Testtube{{Size: 4, Colors: []Color{Color_RED, Color_GREEN, Color_RED, Color_GREEN}}, {Size: 4, Colors: []Color{Color_RED, Color_GREEN, Color_RED, Color_GREEN}}},
+		[]*pb.Testtube{
+			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_RED, pb.Color_GREEN}),
+			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_RED, pb.Color_GREEN}),
+		},
 	)
 
 	if level.Won() {

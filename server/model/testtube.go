@@ -2,28 +2,30 @@ package model
 
 import (
 	"errors"
+
+	pb "github.com/sangharsh/color-sort/gen/modelpb"
 )
 
-func NewTesttube(size int, colors []Color) *Testtube {
-	return &Testtube{
+func NewTesttube(size int, colors []pb.Color) *pb.Testtube {
+	return &pb.Testtube{
 		Size:   int32(size),
 		Colors: colors,
 	}
 }
 
-func (tt *Testtube) IsEmpty() bool {
+func IsEmpty(tt *pb.Testtube) bool {
 	return len(tt.GetColors()) == 0
 }
 
-func (tt *Testtube) IsFull() bool {
+func IsFull(tt *pb.Testtube) bool {
 	return int32(len(tt.GetColors())) == tt.GetSize()
 }
 
-func (tt *Testtube) IsComplete() bool {
-	if tt.IsEmpty() {
+func IsComplete(tt *pb.Testtube) bool {
+	if IsEmpty(tt) {
 		return true
 	}
-	if !tt.IsFull() {
+	if !IsFull(tt) {
 		return false
 	}
 	for _, e := range tt.GetColors() {
@@ -34,23 +36,23 @@ func (tt *Testtube) IsComplete() bool {
 	return true
 }
 
-func (tt *Testtube) Peek() (Color, error) {
+func Peek(tt *pb.Testtube) (pb.Color, error) {
 	if len(tt.GetColors()) == 0 {
-		return Color_BLANK, errors.New("tt is empty")
+		return pb.Color_BLANK, errors.New("tt is empty")
 	}
 	return tt.GetColors()[len(tt.GetColors())-1], nil
 }
 
-func (tt *Testtube) Pop() (Color, error) {
+func Pop(tt *pb.Testtube) (pb.Color, error) {
 	if len(tt.GetColors()) == 0 {
-		return Color_BLANK, errors.New("tt is empty")
+		return pb.Color_BLANK, errors.New("tt is empty")
 	}
 	color := tt.GetColors()[len(tt.GetColors())-1]
 	tt.Colors = tt.GetColors()[:len(tt.GetColors())-1]
 	return color, nil
 }
 
-func (tt *Testtube) AddColor(color Color) error {
+func AddColor(tt *pb.Testtube, color pb.Color) error {
 	if len(tt.Colors) > 0 && tt.Colors[len(tt.Colors)-1] != color {
 		return errors.New("color not matching")
 	}

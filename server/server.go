@@ -7,8 +7,8 @@ import (
 	"log"
 	"net"
 
+	pb "github.com/sangharsh/color-sort/gen/modelpb"
 	"github.com/sangharsh/color-sort/model"
-	pb "github.com/sangharsh/color-sort/model"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -21,12 +21,15 @@ type ColorSortApiServer struct {
 	pb.UnimplementedColorSortApiServer
 }
 
-func (server *ColorSortApiServer) GetGameLevel(ctx context.Context, req *model.LevelRequest) (*model.GameLevel, error) {
+func (server *ColorSortApiServer) GetGameLevel(ctx context.Context, req *pb.LevelRequest) (*pb.GameLevel, error) {
 	level := model.NewGameLevel(
 		1,
-		[]*model.Testtube{{Size: 4, Colors: []model.Color{model.Color_RED, model.Color_GREEN, model.Color_RED, model.Color_GREEN}}, {Size: 4, Colors: []model.Color{model.Color_RED, model.Color_GREEN, model.Color_RED, model.Color_GREEN}}},
+		[]*pb.Testtube{
+			model.NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_RED, pb.Color_GREEN}),
+			model.NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_RED, pb.Color_GREEN}),
+		},
 	)
-	return level, nil
+	return &level.Glpb, nil
 }
 
 func main() {

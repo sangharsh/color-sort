@@ -1,26 +1,34 @@
 package model
 
-func NewGameLevel(level int32, tubes []*Testtube) *GameLevel {
-	tubes2 := append(tubes, &Testtube{Size: 4, Colors: []Color{}}, &Testtube{Size: 4, Colors: []Color{}})
-	gameLevel := &GameLevel{
+import (
+	pb "github.com/sangharsh/color-sort/gen/modelpb"
+)
+
+type GameLevel struct {
+	Glpb pb.GameLevel
+}
+
+func NewGameLevel(level int32, tubes []*pb.Testtube) *GameLevel {
+	tubes2 := append(tubes, NewTesttube(4, []pb.Color{}), NewTesttube(4, []pb.Color{}))
+	gameLevel := &GameLevel{pb.GameLevel{
 		Level: level,
 		Tubes: tubes2,
-	}
+	}}
 	return gameLevel
 }
 
 func (level *GameLevel) Pour(srcidx, dstidx int) (bool, error) {
-	src := level.Tubes[srcidx]
-	dst := level.Tubes[dstidx]
-	color, err := src.Peek()
+	src := level.Glpb.Tubes[srcidx]
+	dst := level.Glpb.Tubes[dstidx]
+	color, err := Peek(src)
 	if err != nil {
 		return false, err
 	}
-	err = dst.AddColor(color)
+	err = AddColor(dst, color)
 	if err != nil {
 		return false, err
 	}
-	_, err = src.Pop()
+	_, err = Pop(src)
 	if err != nil {
 		return false, err
 	}
@@ -29,8 +37,8 @@ func (level *GameLevel) Pour(srcidx, dstidx int) (bool, error) {
 }
 
 func (level *GameLevel) Won() bool {
-	for _, tt := range level.GetTubes() {
-		if !tt.IsComplete() {
+	for _, tt := range level.Glpb.GetTubes() {
+		if !IsComplete(tt) {
 			return false
 		}
 	}
