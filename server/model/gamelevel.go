@@ -14,18 +14,18 @@ func NewGameLevel(level int32, tubes []*pb.Testtube) *pb.GameLevel {
 	}
 }
 
-func Pour(level *pb.GameLevel, srcidx int, dstidx int) (bool, error) {
+func pour(level *pb.GameLevel, srcidx int, dstidx int) (bool, error) {
 	src := level.Tubes[srcidx]
 	dst := level.Tubes[dstidx]
-	color, err := Peek(src)
+	color, err := peek(src)
 	if err != nil {
 		return false, err
 	}
-	err = AddColor(dst, color)
+	err = addColor(dst, color)
 	if err != nil {
 		return false, err
 	}
-	_, err = Pop(src)
+	_, err = pop(src)
 	if err != nil {
 		return false, err
 	}
@@ -33,9 +33,9 @@ func Pour(level *pb.GameLevel, srcidx int, dstidx int) (bool, error) {
 	return true, nil
 }
 
-func Won(level *pb.GameLevel) bool {
+func won(level *pb.GameLevel) bool {
 	for _, tt := range level.GetTubes() {
-		if !IsComplete(tt) {
+		if !isComplete(tt) {
 			return false
 		}
 	}

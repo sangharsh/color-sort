@@ -16,7 +16,7 @@ func TestPourValid(t *testing.T) {
 		},
 	)
 
-	_, err := Pour(level, 0, 1)
+	_, err := pour(level, 0, 1)
 	if err != nil {
 		t.Fatalf(`Unable to pour. Level: %v \n Error: %v`, &level, err)
 	}
@@ -32,7 +32,7 @@ func TestPourNonMatching(t *testing.T) {
 		},
 	)
 
-	_, err := Pour(level, 0, 1)
+	_, err := pour(level, 0, 1)
 	if err == nil {
 		t.Fatalf(`Able to pour. Level: %v`, &level)
 	}
@@ -46,7 +46,7 @@ func TestPourDstFull(t *testing.T) {
 			NewTesttube(2, []pb.Color{pb.Color_RED, pb.Color_GREEN}),
 		},
 	)
-	_, err := Pour(level, 0, 1)
+	_, err := pour(level, 0, 1)
 	if err == nil {
 		t.Fatalf(`Able to pour. Level: %v`, &level)
 	}
@@ -60,7 +60,7 @@ func TestPourSrcEmpty(t *testing.T) {
 			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN}),
 		},
 	)
-	_, err := Pour(level, 0, 1)
+	_, err := pour(level, 0, 1)
 	if err == nil {
 		t.Fatalf(`Able to pour. Level: %v`, &level)
 	}
@@ -75,20 +75,20 @@ func TestGamePlay(t *testing.T) {
 		},
 	)
 
-	if Won(level) {
+	if won(level) {
 		t.Fatalf(`Game won. Level: %v`, &level)
 	}
 
 	solve := [][]int{{0, 2}, {0, 3}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {1, 2}, {1, 3}}
 
 	for _, move := range solve {
-		_, err := Pour(level, move[0], move[1])
+		_, err := pour(level, move[0], move[1])
 		if err != nil {
 			t.Fatalf(`Unable to pour. Error: %v`, err)
 		}
 	}
 
-	if !Won(level) {
+	if !won(level) {
 		t.Fatalf(`Game not won. Level: %v`, &level)
 	}
 }
