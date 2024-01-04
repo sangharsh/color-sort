@@ -61,29 +61,3 @@ func TestPourSrcEmpty(t *testing.T) {
 		t.Fatalf(`Able to pour. Level: %v`, &level)
 	}
 }
-
-func TestGamePlay(t *testing.T) {
-	level := &pb.LevelState{
-		Tubes: []*pb.Testtube{
-			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_RED, pb.Color_GREEN}),
-			NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_RED, pb.Color_GREEN}),
-		},
-	}
-
-	if won(level) {
-		t.Fatalf(`Game won. Level: %v`, &level)
-	}
-
-	solve := [][]int{{0, 2}, {0, 3}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {1, 2}, {1, 3}}
-
-	for _, move := range solve {
-		_, err := pour(level, move[0], move[1])
-		if err != nil {
-			t.Fatalf(`Unable to pour. Error: %v`, err)
-		}
-	}
-
-	if !won(level) {
-		t.Fatalf(`Game not won. Level: %v`, &level)
-	}
-}

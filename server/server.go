@@ -23,9 +23,17 @@ type ColorSortApiServer struct {
 }
 
 func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevelPlayRequest) (*pb.LevelPlay, error) {
+	log.Printf("Request: %v\n", req)
 	level := level.Generate(req.GetId())
 	levelPlay := model.NewLevelPlay(level)
 	return levelPlay, nil
+}
+
+func (server *ColorSortApiServer) Pour(ctx context.Context, req *pb.PourRequest) (*pb.PourResponse, error) {
+	log.Printf("Request: %v\n", req)
+	// log.Printf("Field: %v\n%v\n%v", req.GetSrc(), req.GetDst(), req.GetLevel())
+	// return &pb.PourResponse{}, nil
+	return model.Pour(req), nil
 }
 
 func main() {

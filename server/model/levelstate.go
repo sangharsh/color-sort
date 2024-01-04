@@ -4,6 +4,7 @@ import (
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
 )
 
+// TODO: Pours only a single item right now
 func pour(level *pb.LevelState, srcidx int, dstidx int) (bool, error) {
 	src := level.Tubes[srcidx]
 	dst := level.Tubes[dstidx]

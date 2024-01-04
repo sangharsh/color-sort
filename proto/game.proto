@@ -49,28 +49,28 @@ message NewLevelPlayRequest {
     int32 id = 1;
 }
 
-// message PourRequest {
-//     int32 src = 1;
-//     int32 dst = 2;
-//     LevelPlay level = 3;
-// }
+message PourRequest {
+    int32 src = 1;
+    int32 dst = 2;
+    LevelPlay level = 3;
+}
 
-// message PourSuccessResponse {
-//     int32 src = 1;
-//     int32 dst = 2;
-//     int32 numItemsPoured = 3;
-// }
+message PourSuccessResponse {
+    int32 src = 1;
+    int32 dst = 2;
+    int32 numItemsPoured = 3;
+}
 
-// message PourResponse {
-//     oneof status {
-//         string err = 1;
-//         PourSuccessResponse response = 2;
-//     }
-//     LevelPlay level = 3;
-// }
+message PourResponse {
+    oneof status {
+        string err = 1;
+        PourSuccessResponse response = 2;
+    }
+    LevelPlay level = 3;
+}
 
 service ColorSortApi {
     rpc NewLevel(NewLevelPlayRequest) returns (LevelPlay) {}
-    // rpc Pour(PourRequest) returns (PourResponse) {}
+    rpc Pour(PourRequest) returns (PourResponse) {}
     // rpc Undo(LevelPlay) returns (LevelPlay) {}
 }
