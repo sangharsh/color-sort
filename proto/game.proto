@@ -16,6 +16,14 @@ enum Color {
     GREEN = 2;
     BLUE = 3;
     YELLOW = 4;
+    GRAY = 5;
+    LIME_GREEN = 6;
+    VIOLET = 7;
+    PINK = 8;
+    ORANGE = 9;
+    SKY_BLUE = 10;
+    LIGHT_GREEN = 11;
+    BROWN = 12;
 }
 message Testtube {
     int32 size = 1;

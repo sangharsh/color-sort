@@ -9,7 +9,20 @@ import (
 
 var (
 	minTubes   = 2
-	colorArray = [...]pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_BLUE, pb.Color_YELLOW}
+	colorArray = [...]pb.Color{
+		pb.Color_RED,
+		pb.Color_GREEN,
+		pb.Color_BLUE,
+		pb.Color_YELLOW,
+		pb.Color_GRAY,
+		pb.Color_LIME_GREEN,
+		pb.Color_VIOLET,
+		pb.Color_PINK,
+		pb.Color_ORANGE,
+		pb.Color_SKY_BLUE,
+		pb.Color_LIGHT_GREEN,
+		pb.Color_BROWN,
+	}
 )
 
 func Generate(level int32) *model.GameLevel {
