@@ -23,7 +23,7 @@ type ColorSortApiServer struct {
 
 func (server *ColorSortApiServer) GetGameLevel(ctx context.Context, req *pb.LevelRequest) (*pb.GameLevel, error) {
 	level := level.Generate(req.GetLevel())
-	return &level.Glpb, nil
+	return level, nil
 }
 
 func main() {

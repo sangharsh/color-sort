@@ -11,15 +11,15 @@ import (
 func TestLevelNumber(t *testing.T) {
 	level := 5
 	gl := Generate(int32(level))
-	fmt.Printf("gl: %v\n", gl.Glpb.String())
-	if gl.Glpb.GetLevel() != int32(level) {
+	fmt.Printf("gl: %v\n", gl.String())
+	if gl.GetLevel() != int32(level) {
 		t.Fatalf("Level not matching")
 	}
 }
 
 func TestTubesAndColors(t *testing.T) {
 	gl := Generate(rand.Int31())
-	tubes := gl.Glpb.GetTubes()
+	tubes := gl.GetTubes()
 	colorCountMap := make(map[pb.Color]int)
 
 	for i := 0; i < len(tubes); i++ {
