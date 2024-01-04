@@ -9,6 +9,7 @@ import (
 
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
 	"github.com/sangharsh/color-sort/level"
+	"github.com/sangharsh/color-sort/model"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -21,9 +22,10 @@ type ColorSortApiServer struct {
 	pb.UnimplementedColorSortApiServer
 }
 
-func (server *ColorSortApiServer) GetGameLevel(ctx context.Context, req *pb.LevelRequest) (*pb.GameLevel, error) {
-	level := level.Generate(req.GetLevel())
-	return level, nil
+func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevelPlayRequest) (*pb.LevelPlay, error) {
+	level := level.Generate(req.GetId())
+	levelPlay := model.NewLevelPlay(level)
+	return levelPlay, nil
 }
 
 func main() {

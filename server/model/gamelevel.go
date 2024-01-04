@@ -4,17 +4,17 @@ import (
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
 )
 
-func NewGameLevel(level int32, tubes []*pb.Testtube) *pb.GameLevel {
+func NewLevel(level int32, tubes []*pb.Testtube) *pb.Level {
 	tubes2 := append(tubes,
 		NewTesttube(4, []pb.Color{}),
 		NewTesttube(4, []pb.Color{}))
-	return &pb.GameLevel{
-		Level: level,
-		Tubes: tubes2,
+	return &pb.Level{
+		Id:         level,
+		StartState: &pb.LevelState{Tubes: tubes2},
 	}
 }
 
-func pour(level *pb.GameLevel, srcidx int, dstidx int) (bool, error) {
+func pour(level *pb.LevelState, srcidx int, dstidx int) (bool, error) {
 	src := level.Tubes[srcidx]
 	dst := level.Tubes[dstidx]
 	color, err := peek(src)
@@ -33,7 +33,7 @@ func pour(level *pb.GameLevel, srcidx int, dstidx int) (bool, error) {
 	return true, nil
 }
 
-func won(level *pb.GameLevel) bool {
+func won(level *pb.LevelState) bool {
 	for _, tt := range level.GetTubes() {
 		if !isComplete(tt) {
 			return false
