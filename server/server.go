@@ -25,6 +25,23 @@ type ColorSortApiServer struct {
 	pb.UnimplementedColorSortApiServer
 }
 
+func getLevelPlayFromDb(ctx context.Context) (string, *pb.LevelPlay, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return "", nil, errors.New("unable to read context")
+	}
+	userId := md["colorsort-userid"][0]
+	if userId == "" {
+		return "", nil, errors.New("userId not found in request")
+	}
+	levelPlay := db.Get(userId)
+
+	if levelPlay == nil {
+		return "", nil, errors.New("levelPlay not found for user")
+	}
+	return userId, levelPlay, nil
+}
+
 func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevelPlayRequest) (*pb.LevelState, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
@@ -39,22 +56,23 @@ func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevel
 }
 
 func (server *ColorSortApiServer) Pour(ctx context.Context, req *pb.PourRequest) (*pb.PourResponse, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return nil, errors.New("unable to read context")
+	_, levelPlay, err := getLevelPlayFromDb(ctx)
+	if err != nil {
+		return nil, err
 	}
-	userId := md["colorsort-userid"][0]
-	if userId == "" {
-		return nil, errors.New("userId not found in request")
-	}
-	levelPlay := db.Get(userId)
-
-	if levelPlay == nil {
-		return nil, errors.New("levelPlay not found for user")
-	}
-	// log.Printf("Field: %v\n%v\n%v", req.GetSrc(), req.GetDst(), req.GetLevel())
-	// return &pb.PourResponse{}, nil
 	return model.Pour(req, levelPlay), nil
+}
+
+func (server *ColorSortApiServer) Reset(ctx context.Context, req *pb.ResetRequest) (*pb.LevelState, error) {
+	userId, levelPlay, err := getLevelPlayFromDb(ctx)
+	if err != nil {
+		return nil, err
+	}
+	levelId := levelPlay.GetCurrentState().GetId()
+	level := level.Generate(levelId)
+	levelPlayNew := model.NewLevelPlay(level)
+	db.Set(userId, levelPlayNew)
+	return levelPlayNew.GetCurrentState(), nil
 }
 
 func main() {
