@@ -1,6 +1,8 @@
 package model
 
 import (
+	"errors"
+
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
 	"google.golang.org/protobuf/proto"
 )
@@ -36,4 +38,17 @@ func Pour(pourReq *pb.PourRequest, levelPlay *pb.LevelPlay) *pb.PourResponse {
 		},
 		Level: levelPlay.GetCurrentState(),
 	}
+}
+
+func Undo(undoReq *pb.UndoRequest, levelPlay *pb.LevelPlay) (*pb.LevelState, error) {
+	moves := levelPlay.GetMoves()
+	if len(moves) == 0 {
+		return nil, errors.New("no moves to undo")
+	}
+	lastMove := moves[len(moves)-1]
+	success, err := undo(levelPlay.GetCurrentState(), lastMove)
+	if err != nil || !success {
+		return nil, err
+	}
+	return levelPlay.GetCurrentState(), nil
 }

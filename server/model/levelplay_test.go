@@ -84,3 +84,33 @@ func TestGamePlay(t *testing.T) {
 		t.Fatalf(`Game not won. Level: %v`, &level)
 	}
 }
+
+func TestUndoSuccess(t *testing.T) {
+	tubes := []*pb.Testtube{
+		NewTesttube(2, []pb.Color{pb.Color_RED}),
+		NewTesttube(2, []pb.Color{pb.Color_GREEN}),
+	}
+	levelPlay := &pb.LevelPlay{
+		CurrentState: &pb.LevelState{
+			Id:    1,
+			Tubes: tubes,
+		},
+		Moves: []*pb.PourSuccessResponse{
+			{Src: 0, Dst: 1, NumItemsPoured: 1},
+		},
+	}
+	req := &pb.UndoRequest{}
+	level, err := Undo(req, levelPlay)
+
+	if err != nil {
+		t.Fatalf("Got error.\nErr: %v", err)
+	}
+	assert.Equal(t,
+		[]pb.Color{pb.Color_RED, pb.Color_GREEN},
+		level.GetTubes()[0].GetColors(),
+		"src colors should match")
+	assert.Equal(t,
+		[]pb.Color{},
+		levelPlay.CurrentState.GetTubes()[1].GetColors(),
+		"dst colors should match")
+}

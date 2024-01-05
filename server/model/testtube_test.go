@@ -54,3 +54,30 @@ func TestAddColorFull(t *testing.T) {
 		t.Fatalf(`Added to a full testtube %v.`, tt)
 	}
 }
+
+func TestForceAddColorValid(t *testing.T) {
+	tt := NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN})
+	color := pb.Color_GREEN
+	err := forceAddColor(tt, color)
+	if err != nil {
+		t.Fatalf(`Unable to add pb.Color %q to %v. Error: %v`, color, tt, err)
+	}
+}
+
+func TestForceAddColorNonMatching(t *testing.T) {
+	tt := NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN})
+	color := pb.Color_BLUE
+	err := forceAddColor(tt, color)
+	if err != nil {
+		t.Fatalf(`Forcing non-matching color failed. Color %q to %v.`, color, tt)
+	}
+}
+
+func TestForceAddColorFull(t *testing.T) {
+	tt := NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_BLUE, pb.Color_YELLOW})
+	color := pb.Color_BLUE
+	err := forceAddColor(tt, color)
+	if err == nil {
+		t.Fatalf(`Added to a full testtube %v.`, tt)
+	}
+}

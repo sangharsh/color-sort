@@ -48,7 +48,6 @@ func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevel
 		return nil, errors.New("unable to read context")
 	}
 	userId := md["colorsort-userid"][0]
-	log.Printf("ok: %v, md: %v", ok, md)
 	level := level.Generate(req.GetId())
 	levelPlay := model.NewLevelPlay(level)
 	db.Set(userId, levelPlay)
@@ -73,6 +72,15 @@ func (server *ColorSortApiServer) Reset(ctx context.Context, req *pb.ResetReques
 	levelPlayNew := model.NewLevelPlay(level)
 	db.Set(userId, levelPlayNew)
 	return levelPlayNew.GetCurrentState(), nil
+}
+
+func (server *ColorSortApiServer) Undo(ctx context.Context, req *pb.UndoRequest) (*pb.LevelState, error) {
+	_, levelPlay, err := getLevelPlayFromDb(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return model.Undo(req, levelPlay)
 }
 
 func main() {

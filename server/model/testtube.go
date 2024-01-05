@@ -56,6 +56,10 @@ func addColor(tt *pb.Testtube, color pb.Color) error {
 	if len(tt.Colors) > 0 && tt.Colors[len(tt.Colors)-1] != color {
 		return errors.New("color not matching")
 	}
+	return forceAddColor(tt, color)
+}
+
+func forceAddColor(tt *pb.Testtube, color pb.Color) error {
 	if len(tt.Colors) == int(tt.GetSize()) {
 		return errors.New("tt is full")
 	}
