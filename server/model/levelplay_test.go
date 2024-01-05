@@ -15,11 +15,10 @@ func TestPourSuccess(t *testing.T) {
 	})
 	levelPlay := NewLevelPlay(level)
 	req := &pb.PourRequest{
-		Level: levelPlay,
-		Src:   0,
-		Dst:   2,
+		Src: 0,
+		Dst: 2,
 	}
-	resp := Pour(req)
+	resp := Pour(req, levelPlay)
 	fmt.Printf("PourResponse: %v\n", resp)
 	if resp.GetErr() != "" || resp.GetResponse() == nil {
 		t.Fatalf("Got error or empty response.\nPourResponse: %v", resp)
@@ -49,11 +48,10 @@ func TestPourErr(t *testing.T) {
 	})
 	levelPlay := NewLevelPlay(level)
 	req := &pb.PourRequest{
-		Level: levelPlay,
-		Src:   0,
-		Dst:   1,
+		Src: 0,
+		Dst: 1,
 	}
-	resp := Pour(req)
+	resp := Pour(req, levelPlay)
 	if resp.GetErr() == "" || resp.GetResponse() != nil {
 		t.Fatalf("Got empty error or valid response.\nPourResponse: %v", resp)
 	}
@@ -73,10 +71,9 @@ func TestGamePlay(t *testing.T) {
 
 	for _, move := range solve {
 		pourResp := Pour(&pb.PourRequest{
-			Src:   move[0],
-			Dst:   move[1],
-			Level: levelPlay,
-		})
+			Src: move[0],
+			Dst: move[1],
+		}, levelPlay)
 		// _, err := pour(level, move[0], move[1])
 		if pourResp.GetErr() != "" {
 			t.Fatalf(`Unable to pour. PourResponse: %v`, pourResp)

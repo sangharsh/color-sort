@@ -13,8 +13,7 @@ func NewLevelPlay(level *pb.Level) *pb.LevelPlay {
 	}
 }
 
-func Pour(pourReq *pb.PourRequest) *pb.PourResponse {
-	levelPlay := pourReq.GetLevel()
+func Pour(pourReq *pb.PourRequest, levelPlay *pb.LevelPlay) *pb.PourResponse {
 	success, err := pour(levelPlay.GetCurrentState(), int(pourReq.GetSrc()), int(pourReq.GetDst()))
 	if !success || err != nil {
 		return &pb.PourResponse{

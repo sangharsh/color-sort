@@ -52,7 +52,6 @@ message NewLevelPlayRequest {
 message PourRequest {
     int32 src = 1;
     int32 dst = 2;
-    LevelPlay level = 3;
 }
 
 message PourSuccessResponse {
