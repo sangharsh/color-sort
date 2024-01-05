@@ -25,7 +25,7 @@ type ColorSortApiServer struct {
 	pb.UnimplementedColorSortApiServer
 }
 
-func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevelPlayRequest) (*pb.LevelPlay, error) {
+func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevelPlayRequest) (*pb.LevelState, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, errors.New("unable to read context")
@@ -35,7 +35,7 @@ func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevel
 	level := level.Generate(req.GetId())
 	levelPlay := model.NewLevelPlay(level)
 	db.Set(userId, levelPlay)
-	return levelPlay, nil
+	return levelPlay.GetCurrentState(), nil
 }
 
 func (server *ColorSortApiServer) Pour(ctx context.Context, req *pb.PourRequest) (*pb.PourResponse, error) {

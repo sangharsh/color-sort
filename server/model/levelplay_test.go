@@ -27,17 +27,17 @@ func TestPourSuccess(t *testing.T) {
 	if sResp.Src != req.Src || sResp.Dst != req.Dst || sResp.NumItemsPoured != 1 {
 		t.Fatalf("Unexpected src/dst.\nPourResponse: %v", resp)
 	}
-	move := resp.Level.GetMoves()[0]
+	move := levelPlay.GetMoves()[0]
 	if move.Src != req.Src || move.Dst != req.Dst || move.NumItemsPoured != 1 {
 		t.Fatalf("Unexpected move.\nPourResponse: %v", resp)
 	}
 	assert.Equal(t,
 		[]pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_RED},
-		resp.Level.CurrentState.GetTubes()[0].GetColors(),
+		levelPlay.CurrentState.GetTubes()[0].GetColors(),
 		"Src colors should match")
 	assert.Equal(t,
 		[]pb.Color{pb.Color_GREEN},
-		resp.Level.CurrentState.GetTubes()[2].GetColors(),
+		levelPlay.CurrentState.GetTubes()[2].GetColors(),
 		"Dst colors should match")
 }
 
@@ -78,7 +78,6 @@ func TestGamePlay(t *testing.T) {
 		if pourResp.GetErr() != "" {
 			t.Fatalf(`Unable to pour. PourResponse: %v`, pourResp)
 		}
-		levelPlay = pourResp.Level
 	}
 
 	if !won(levelPlay.GetCurrentState()) {

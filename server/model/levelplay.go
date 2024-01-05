@@ -19,7 +19,7 @@ func Pour(pourReq *pb.PourRequest, levelPlay *pb.LevelPlay) *pb.PourResponse {
 			Status: &pb.PourResponse_Err{
 				Err: err.Error(),
 			},
-			Level: levelPlay,
+			Level: levelPlay.GetCurrentState(),
 		}
 	}
 
@@ -34,6 +34,6 @@ func Pour(pourReq *pb.PourRequest, levelPlay *pb.LevelPlay) *pb.PourResponse {
 		Status: &pb.PourResponse_Response{
 			Response: pourRes,
 		},
-		Level: levelPlay,
+		Level: levelPlay.GetCurrentState(),
 	}
 }

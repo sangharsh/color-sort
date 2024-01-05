@@ -60,11 +60,12 @@ message PourResponse {
         string err = 1;
         PourSuccessResponse response = 2;
     }
-    LevelPlay level = 3;
+    LevelState level = 3;
 }
 
 service ColorSortApi {
-    rpc NewLevel(NewLevelPlayRequest) returns (LevelPlay) {}
-    rpc Pour(PourRequest) returns (PourResponse) {}
-    // rpc Undo(LevelPlay) returns (LevelPlay) {}
+    rpc NewLevel(NewLevelPlayRequest) returns (LevelState) {} // Get new level
+    rpc Pour(PourRequest) returns (PourResponse) {} // Try a move
+    // rpc Reset() returns (LevelState) {} // Go to initial state of the level
+    // rpc Undo() returns (LevelState) {} // Undo last move
 }
