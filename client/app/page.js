@@ -102,10 +102,13 @@ function grpcCall(callback) {
     request.setId(1);
 
     const processResponse = (err, response) => {
-        console.log("err:", err, "response: ", response);
+        if (err) {
+            console.log("err:", err, "response: ", response);
+            return;
+        }
         callback(response.getCurrentstate());
     };
 
-    service.newLevel(request, {}, processResponse);
-
+    var metadata = { 'colorsort-userid': 'abc123' };
+    service.newLevel(request, metadata, processResponse);
 }
