@@ -9,10 +9,10 @@ import (
 )
 
 func TestLevelNumber(t *testing.T) {
-	level := 5
-	gl := Generate(int32(level))
-	fmt.Printf("gl: %v\n", gl.String())
-	if gl.GetId() != int32(level) {
+	levelId := 5
+	level := Generate(int32(levelId))
+	fmt.Printf("gl: %v\n", level.String())
+	if level.GetId() != int32(levelId) {
 		t.Fatalf("Level not matching")
 	}
 }

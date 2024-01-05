@@ -7,21 +7,21 @@ import (
 )
 
 func TestIsCompleteNotFull(t *testing.T) {
-	tt := NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_RED})
+	tt := NewTesttube(2, []pb.Color{pb.Color_RED})
 	if isComplete(tt) {
 		t.Fatalf(`Half tt returned as completed. tt: %v`, tt)
 	}
 }
 
 func TestIsCompleteDiffColors(t *testing.T) {
-	tt := NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_RED, pb.Color_RED, pb.Color_GREEN})
+	tt := NewTesttube(2, []pb.Color{pb.Color_RED, pb.Color_GREEN})
 	if isComplete(tt) {
 		t.Fatalf(`Diff pb.Colors tt returned as completed. tt: %v`, tt)
 	}
 }
 
 func TestPopEmpty(t *testing.T) {
-	tt := NewTesttube(4, []pb.Color{})
+	tt := NewTesttube(2, []pb.Color{})
 	_, err := pop(tt)
 	if err == nil {
 		t.Fatalf(`Popped empty tt. tt: %v; Error: %v`, tt, err)
@@ -47,7 +47,7 @@ func TestAddColorNonMatching(t *testing.T) {
 }
 
 func TestAddColorFull(t *testing.T) {
-	tt := NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_BLUE, pb.Color_YELLOW})
+	tt := NewTesttube(2, []pb.Color{pb.Color_RED, pb.Color_BLUE})
 	color := pb.Color_BLUE
 	err := addColor(tt, color)
 	if err == nil {
@@ -55,17 +55,17 @@ func TestAddColorFull(t *testing.T) {
 	}
 }
 
-func TestForceAddColorValid(t *testing.T) {
-	tt := NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN})
-	color := pb.Color_GREEN
+func TestForceAddMatchingColor(t *testing.T) {
+	tt := NewTesttube(2, []pb.Color{pb.Color_RED})
+	color := pb.Color_RED
 	err := forceAddColor(tt, color)
 	if err != nil {
 		t.Fatalf(`Unable to add pb.Color %q to %v. Error: %v`, color, tt, err)
 	}
 }
 
-func TestForceAddColorNonMatching(t *testing.T) {
-	tt := NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN})
+func TestForceAddNonMatchingColor(t *testing.T) {
+	tt := NewTesttube(4, []pb.Color{pb.Color_RED})
 	color := pb.Color_BLUE
 	err := forceAddColor(tt, color)
 	if err != nil {
@@ -74,7 +74,7 @@ func TestForceAddColorNonMatching(t *testing.T) {
 }
 
 func TestForceAddColorFull(t *testing.T) {
-	tt := NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_BLUE, pb.Color_YELLOW})
+	tt := NewTesttube(2, []pb.Color{pb.Color_RED, pb.Color_GREEN})
 	color := pb.Color_BLUE
 	err := forceAddColor(tt, color)
 	if err == nil {
