@@ -2,14 +2,18 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
 	"net"
 
+	"github.com/sangharsh/color-sort/db"
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
 	"github.com/sangharsh/color-sort/level"
+	"github.com/sangharsh/color-sort/model"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -21,9 +25,62 @@ type ColorSortApiServer struct {
 	pb.UnimplementedColorSortApiServer
 }
 
-func (server *ColorSortApiServer) GetGameLevel(ctx context.Context, req *pb.LevelRequest) (*pb.GameLevel, error) {
-	level := level.Generate(req.GetLevel())
-	return &level.Glpb, nil
+func getLevelPlayFromDb(ctx context.Context) (string, *pb.LevelPlay, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return "", nil, errors.New("unable to read context")
+	}
+	userId := md["colorsort-userid"][0]
+	if userId == "" {
+		return "", nil, errors.New("userId not found in request")
+	}
+	levelPlay := db.Get(userId)
+
+	if levelPlay == nil {
+		return "", nil, errors.New("levelPlay not found for user")
+	}
+	return userId, levelPlay, nil
+}
+
+func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevelPlayRequest) (*pb.LevelState, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, errors.New("unable to read context")
+	}
+	userId := md["colorsort-userid"][0]
+	level := level.Generate(req.GetId())
+	levelPlay := model.NewLevelPlay(level)
+	db.Set(userId, levelPlay)
+	return levelPlay.GetCurrentState(), nil
+}
+
+func (server *ColorSortApiServer) Pour(ctx context.Context, req *pb.PourRequest) (*pb.PourResponse, error) {
+	_, levelPlay, err := getLevelPlayFromDb(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return model.Pour(req, levelPlay), nil
+}
+
+func (server *ColorSortApiServer) Reset(ctx context.Context, req *pb.ResetRequest) (*pb.LevelState, error) {
+	userId, levelPlay, err := getLevelPlayFromDb(ctx)
+	if err != nil {
+		return nil, err
+	}
+	levelId := levelPlay.GetCurrentState().GetId()
+	level := level.Generate(levelId)
+	levelPlayNew := model.NewLevelPlay(level)
+	db.Set(userId, levelPlayNew)
+	return levelPlayNew.GetCurrentState(), nil
+}
+
+func (server *ColorSortApiServer) Undo(ctx context.Context, req *pb.UndoRequest) (*pb.LevelState, error) {
+	_, levelPlay, err := getLevelPlayFromDb(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return model.Undo(req, levelPlay)
 }
 
 func main() {

@@ -3,7 +3,7 @@
 import './styles.css';
 
 import { useState } from 'react';
-import { LevelRequest } from '/gen/game_pb.js';
+import { NewLevelPlayRequest } from '/gen/game_pb.js';
 import { ColorSortApiClient } from '/gen/game_grpc_web_pb.js';
 
 export default function Page() {
@@ -98,14 +98,17 @@ function TubeColor({ color }) {
 
 function grpcCall(callback) {
     var service = new ColorSortApiClient('http://localhost:8080');
-    const request = new LevelRequest();
-    request.setLevel(1);
+    const request = new NewLevelPlayRequest();
+    request.setId(1);
 
     const processResponse = (err, response) => {
-        console.log("err:", err, "response: ", response);
-        callback(response);
+        if (err) {
+            console.log("err:", err, "response: ", response);
+            return;
+        }
+        callback(response.getCurrentstate());
     };
 
-    service.getGameLevel(request, {}, processResponse);
-
+    var metadata = { 'colorsort-userid': 'abc123' };
+    service.newLevel(request, metadata, processResponse);
 }

@@ -25,7 +25,7 @@ var (
 	}
 )
 
-func Generate(level int32) *model.GameLevel {
+func Generate(level int32) *pb.LevelState {
 	r := rand.New(rand.NewSource(int64(level)))
 	numTubes := minTubes + r.Intn(len(colorArray)-minTubes)
 	tubes := []*pb.Testtube{}
@@ -40,6 +40,6 @@ func Generate(level int32) *model.GameLevel {
 				colorArray[colorDist[3][i]],
 			}))
 	}
-	gl := model.NewGameLevel(level, tubes)
+	gl := model.NewLevel(level, tubes)
 	return gl
 }

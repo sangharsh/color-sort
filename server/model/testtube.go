@@ -13,19 +13,19 @@ func NewTesttube(size int, colors []pb.Color) *pb.Testtube {
 	}
 }
 
-func IsEmpty(tt *pb.Testtube) bool {
+func isEmpty(tt *pb.Testtube) bool {
 	return len(tt.GetColors()) == 0
 }
 
-func IsFull(tt *pb.Testtube) bool {
+func isFull(tt *pb.Testtube) bool {
 	return int32(len(tt.GetColors())) == tt.GetSize()
 }
 
-func IsComplete(tt *pb.Testtube) bool {
-	if IsEmpty(tt) {
+func isComplete(tt *pb.Testtube) bool {
+	if isEmpty(tt) {
 		return true
 	}
-	if !IsFull(tt) {
+	if !isFull(tt) {
 		return false
 	}
 	for _, e := range tt.GetColors() {
@@ -36,14 +36,14 @@ func IsComplete(tt *pb.Testtube) bool {
 	return true
 }
 
-func Peek(tt *pb.Testtube) (pb.Color, error) {
+func peek(tt *pb.Testtube) (pb.Color, error) {
 	if len(tt.GetColors()) == 0 {
 		return pb.Color_BLANK, errors.New("tt is empty")
 	}
 	return tt.GetColors()[len(tt.GetColors())-1], nil
 }
 
-func Pop(tt *pb.Testtube) (pb.Color, error) {
+func pop(tt *pb.Testtube) (pb.Color, error) {
 	if len(tt.GetColors()) == 0 {
 		return pb.Color_BLANK, errors.New("tt is empty")
 	}
@@ -52,10 +52,14 @@ func Pop(tt *pb.Testtube) (pb.Color, error) {
 	return color, nil
 }
 
-func AddColor(tt *pb.Testtube, color pb.Color) error {
+func addColor(tt *pb.Testtube, color pb.Color) error {
 	if len(tt.Colors) > 0 && tt.Colors[len(tt.Colors)-1] != color {
 		return errors.New("color not matching")
 	}
+	return forceAddColor(tt, color)
+}
+
+func forceAddColor(tt *pb.Testtube, color pb.Color) error {
 	if len(tt.Colors) == int(tt.GetSize()) {
 		return errors.New("tt is full")
 	}

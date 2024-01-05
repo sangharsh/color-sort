@@ -30,15 +30,45 @@ message Testtube {
     repeated Color colors = 2;
 }
 
-message GameLevel {
-    int32 level = 1;
+message LevelState {
+    int32 id = 1;
     repeated Testtube tubes = 2;
 }
 
-message LevelRequest {
-    int32 level = 1;
+message LevelPlay {
+    repeated PourSuccessResponse moves = 2;
+    LevelState currentState = 3;
 }
 
+message NewLevelPlayRequest {
+    int32 id = 1;
+}
+
+message PourRequest {
+    int32 src = 1;
+    int32 dst = 2;
+}
+
+message PourSuccessResponse {
+    int32 src = 1;
+    int32 dst = 2;
+    int32 numItemsPoured = 3;
+}
+
+message PourResponse {
+    oneof status {
+        string err = 1;
+        PourSuccessResponse response = 2;
+    }
+    LevelState level = 3;
+}
+
+message ResetRequest {}
+message UndoRequest {}
+
 service ColorSortApi {
-    rpc GetGameLevel(LevelRequest) returns (GameLevel) {}
+    rpc NewLevel(NewLevelPlayRequest) returns (LevelState) {} // Get new level
+    rpc Pour(PourRequest) returns (PourResponse) {} // Try a move
+    rpc Reset(ResetRequest) returns (LevelState) {} // Go to initial state of the level
+    rpc Undo(UndoRequest) returns (LevelState) {} // Undo last move
 }
