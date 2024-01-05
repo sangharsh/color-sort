@@ -31,16 +31,11 @@ message Testtube {
 }
 
 message LevelState {
-    repeated Testtube tubes = 1;
-}
-
-message Level {
     int32 id = 1;
-    LevelState startState = 2;
+    repeated Testtube tubes = 2;
 }
 
 message LevelPlay {
-    Level level = 1;
     repeated PourSuccessResponse moves = 2;
     LevelState currentState = 3;
 }

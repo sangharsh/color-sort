@@ -5,11 +5,10 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func NewLevelPlay(level *pb.Level) *pb.LevelPlay {
+func NewLevelPlay(level *pb.LevelState) *pb.LevelPlay {
 	return &pb.LevelPlay{
-		Level:        level,
 		Moves:        []*pb.PourSuccessResponse{},
-		CurrentState: proto.Clone(level.GetStartState()).(*pb.LevelState),
+		CurrentState: proto.Clone(level).(*pb.LevelState),
 	}
 }
 

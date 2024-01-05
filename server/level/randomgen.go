@@ -25,7 +25,7 @@ var (
 	}
 )
 
-func Generate(level int32) *pb.Level {
+func Generate(level int32) *pb.LevelState {
 	r := rand.New(rand.NewSource(int64(level)))
 	numTubes := minTubes + r.Intn(len(colorArray)-minTubes)
 	tubes := []*pb.Testtube{}
