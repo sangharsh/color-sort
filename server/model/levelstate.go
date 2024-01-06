@@ -1,17 +1,21 @@
 package model
 
 import (
+	"errors"
+
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
 )
 
-func NewLevel(level int32, tubes []*pb.Testtube) *pb.LevelState {
+func NewLevel(levelId int32, tubes []*pb.Testtube) *pb.LevelState {
 	tubes2 := append(tubes,
 		NewTesttube(4, []pb.Color{}),
 		NewTesttube(4, []pb.Color{}))
-	return &pb.LevelState{
-		Id:    level,
+	level := &pb.LevelState{
+		Id:    levelId,
 		Tubes: tubes2,
 	}
+	level.Won = won(level)
+	return level
 }
 
 type addFn func(*pb.Testtube, pb.Color) error
@@ -36,12 +40,23 @@ func move(from *pb.Testtube, to *pb.Testtube, fn addFn) (bool, error) {
 
 // TODO: Pours only a single item right now
 func pour(level *pb.LevelState, srcidx int, dstidx int) (bool, error) {
+	if level.Won {
+		return false, errors.New("level has been won")
+	}
 	src := level.Tubes[srcidx]
 	dst := level.Tubes[dstidx]
-	return move(src, dst, addColor)
+	ok, err := move(src, dst, addColor)
+	if !ok || err != nil {
+		return ok, err
+	}
+	level.Won = won(level)
+	return true, nil
 }
 
 func undo(level *pb.LevelState, moveResp *pb.PourSuccessResponse) (bool, error) {
+	if level.Won {
+		return false, errors.New("level has been won")
+	}
 	src := level.Tubes[moveResp.GetSrc()]
 	dst := level.Tubes[moveResp.GetDst()]
 	// TODO: numItemsPoured := move.GetNumItemsPoured()
