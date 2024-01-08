@@ -100,7 +100,7 @@ func (server *ColorSortApiServer) Undo(ctx context.Context, req *pb.UndoRequest)
 	return model.Undo(req, levelPlay)
 }
 
-func (server *ColorSortApiServer) NextLevel(ctx context.Context, req *pb.NextRequest) (*pb.LevelState, error) {
+func (server *ColorSortApiServer) NextLevel(ctx context.Context, req *pb.NextLevelRequest) (*pb.LevelState, error) {
 	log.Printf("NextLevel - Entry: \nreq: %v", req.String())
 	userId, levelPlay, err := getUserAndLevelFromDb(ctx)
 	if err != nil {

@@ -1,6 +1,6 @@
 "use client"
 
-import { GetLevelRequest, PourRequest, ResetRequest, UndoRequest, NextRequest } from '/gen/game_pb.js';
+import { GetLevelRequest, PourRequest, ResetRequest, UndoRequest, NextLevelRequest } from '/gen/game_pb.js';
 import { ColorSortApiClient } from '/gen/game_grpc_web_pb.js';
 
 const API_URL = 'http://localhost:8080';
@@ -62,7 +62,7 @@ export function Undo(callback) {
     SERVICE.undo(req, METADATA, processResponse);
 }
 
-export function Next(callback) {
-    const req = new NextRequest();
+export function NextLevel(callback) {
+    const req = new NextLevelRequest();
     SERVICE.nextLevel(req, METADATA, callback);
 }

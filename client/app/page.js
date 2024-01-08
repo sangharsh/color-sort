@@ -3,7 +3,7 @@
 import './styles.css';
 
 import { useState, useEffect } from 'react';
-import { GetLevel, Pour, Reset, Undo, Next } from './service';
+import { GetLevel, Pour, Reset, Undo, NextLevel } from './service';
 
 export default function Page() {
     return (
@@ -75,7 +75,7 @@ function TubeColor({ color }) {
 
 function NextLevelButton({ setGame }) {
     return (
-        <button onClick={e => Next(setGame)}>Next Level</button>
+        <button onClick={e => NextLevel(setGame)}>Next Level</button>
     )
 }
 
