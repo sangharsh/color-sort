@@ -48,6 +48,7 @@ function Game() {
             <p>
                 <NextLevelButton setGame={setGame} />
                 <UndoButton setGame={setGame} />
+                <ResetButton setGame={setGame} />
             </p>
             {renderedTubes}
         </div >
@@ -74,12 +75,18 @@ function TubeColor({ color }) {
 
 function NextLevelButton({ setGame }) {
     return (
-        <button onClick={e => Next(setGame)}>Next</button>
+        <button onClick={e => Next(setGame)}>Next Level</button>
     )
 }
 
 function UndoButton({ setGame }) {
     return (
         <button onClick={e => Undo(setGame)}>Undo</button>
+    )
+}
+
+function ResetButton({ setGame }) {
+    return (
+        <button onClick={e => Reset(setGame)}>Reset</button>
     )
 }

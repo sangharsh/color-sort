@@ -38,7 +38,15 @@ export function Pour(src, dst, callback) {
 
 export function Reset(callback) {
     const req = new ResetRequest();
-    SERVICE.reset(req, METADATA, callback);
+    const processResponse = (err, response) => {
+        if (err) {
+            console.log("err:", err, "response: ", response);
+            return;
+        }
+        callback(response);
+    };
+
+    SERVICE.reset(req, METADATA, processResponse);
 }
 
 export function Undo(callback) {
