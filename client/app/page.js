@@ -2,17 +2,18 @@
 
 import './styles.css';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NewLevel, Pour, Reset, Undo } from './service';
 
 export default function Page() {
-    const [game, setGame] = useState({});
     return (
-        <Game game={game} setGame={setGame} />
+        <Game />
     )
 }
 
-function Game({ game, setGame }) {
+function Game() {
+    const [game, setGame] = useState({});
+
     const renderedTubes = [];
     const [selected, setSelected] = useState(-1);
 
@@ -27,10 +28,11 @@ function Game({ game, setGame }) {
         }
     }
 
-    if (!game || !game.array) {
+    useEffect(() => {
         NewLevel(1, setGame);
-    }
-    if (game.array) {
+    }, []);
+
+    if (game && game.getTubesList) {
         game.getTubesList().forEach((tube, index) => {
             renderedTubes.push(<Tube tube={tube} key={index} tubeIndex={index} selected={selected == index} handleTubeSelection={handleTubeSelection} />);
         });
@@ -38,7 +40,11 @@ function Game({ game, setGame }) {
 
     return (
         <div className="container">
-            <h1>Level {game.id}</h1>
+            <h1>Level {game.getId ? game.getId() : ""}</h1>
+            {
+                game.getWon && game.getWon() ?
+                    (<p>Won!!</p>) : (<p></p>)
+            }
             {renderedTubes}
         </div>
     )
