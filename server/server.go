@@ -43,6 +43,7 @@ func getLevelPlayFromDb(ctx context.Context) (string, *pb.LevelPlay, error) {
 }
 
 func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevelPlayRequest) (*pb.LevelState, error) {
+	log.Printf("Entry: \nreq: %v", req.String())
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, errors.New("unable to read context")
@@ -55,6 +56,7 @@ func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevel
 }
 
 func (server *ColorSortApiServer) Pour(ctx context.Context, req *pb.PourRequest) (*pb.PourResponse, error) {
+	log.Printf("Entry: \nreq: %v", req.String())
 	_, levelPlay, err := getLevelPlayFromDb(ctx)
 	if err != nil {
 		return nil, err
@@ -63,6 +65,7 @@ func (server *ColorSortApiServer) Pour(ctx context.Context, req *pb.PourRequest)
 }
 
 func (server *ColorSortApiServer) Reset(ctx context.Context, req *pb.ResetRequest) (*pb.LevelState, error) {
+	log.Printf("Entry: \nreq: %v", req.String())
 	userId, levelPlay, err := getLevelPlayFromDb(ctx)
 	if err != nil {
 		return nil, err
@@ -75,6 +78,7 @@ func (server *ColorSortApiServer) Reset(ctx context.Context, req *pb.ResetReques
 }
 
 func (server *ColorSortApiServer) Undo(ctx context.Context, req *pb.UndoRequest) (*pb.LevelState, error) {
+	log.Printf("Entry: \nreq: %v", req.String())
 	_, levelPlay, err := getLevelPlayFromDb(ctx)
 	if err != nil {
 		return nil, err

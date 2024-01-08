@@ -1,8 +1,6 @@
 package db
 
 import (
-	"log"
-
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
 )
 
@@ -16,6 +14,5 @@ func Get(userId string) *pb.LevelPlay {
 
 func Set(userId string, levelPlay *pb.LevelPlay) (bool, error) {
 	userIdLevePlayMap[userId] = levelPlay
-	log.Printf("Map: %v", userIdLevePlayMap)
 	return true, nil
 }
