@@ -58,7 +58,7 @@ func (server *ColorSortApiServer) GetLevel(ctx context.Context, req *pb.GetLevel
 	}
 
 	if levelPlay != nil {
-	return levelPlay.GetCurrentState(), nil
+		return levelPlay.GetCurrentState(), nil
 	}
 
 	levelId := int32(1)
@@ -91,12 +91,12 @@ func (server *ColorSortApiServer) Reset(ctx context.Context, req *pb.ResetReques
 }
 
 func (server *ColorSortApiServer) Undo(ctx context.Context, req *pb.UndoRequest) (*pb.LevelState, error) {
-	log.Printf("Entry: \nreq: %v", req.String())
-	_, levelPlay, err := getLevelPlayFromDb(ctx)
+	log.Printf("Undo: \nreq: %v", req.String())
+	userId, levelPlay, err := getUserAndLevelFromDb(ctx)
 	if err != nil {
 		return nil, err
 	}
-
+	db.Set(userId, levelPlay)
 	return model.Undo(req, levelPlay)
 }
 

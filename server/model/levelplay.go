@@ -50,5 +50,6 @@ func Undo(undoReq *pb.UndoRequest, levelPlay *pb.LevelPlay) (*pb.LevelState, err
 	if err != nil || !success {
 		return nil, err
 	}
+	levelPlay.Moves = moves[:len(moves)-1]
 	return levelPlay.GetCurrentState(), nil
 }
