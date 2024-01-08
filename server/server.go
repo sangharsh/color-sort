@@ -100,6 +100,19 @@ func (server *ColorSortApiServer) Undo(ctx context.Context, req *pb.UndoRequest)
 	return model.Undo(req, levelPlay)
 }
 
+func (server *ColorSortApiServer) NextLevel(ctx context.Context, req *pb.NextRequest) (*pb.LevelState, error) {
+	log.Printf("NextLevel - Entry: \nreq: %v", req.String())
+	userId, levelPlay, err := getUserAndLevelFromDb(ctx)
+	if err != nil {
+		return nil, err
+	}
+	levelId := levelPlay.GetCurrentState().GetId() + 1
+	level := level.Generate(levelId)
+	levelPlayNew := model.NewLevelPlay(level)
+	db.Set(userId, levelPlayNew)
+	return levelPlayNew.GetCurrentState(), nil
+}
+
 func main() {
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))

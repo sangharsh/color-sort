@@ -66,10 +66,12 @@ message PourResponse {
 
 message ResetRequest {}
 message UndoRequest {}
+message NextRequest {}
 
 service ColorSortApi {
     rpc GetLevel(GetLevelRequest) returns (LevelState) {} // Get current level
     rpc Pour(PourRequest) returns (PourResponse) {} // Try a move
     rpc Reset(ResetRequest) returns (LevelState) {} // Go to initial state of the level
     rpc Undo(UndoRequest) returns (LevelState) {} // Undo last move
+    rpc NextLevel(NextRequest) returns (LevelState) {} // Get next level
 }
