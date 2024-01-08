@@ -64,5 +64,13 @@ export function Undo(callback) {
 
 export function NextLevel(callback) {
     const req = new NextLevelRequest();
-    SERVICE.nextLevel(req, METADATA, callback);
+    const processResponse = (err, response) => {
+        if (err) {
+            console.log("err:", err, "response: ", response);
+            return;
+        }
+        callback(response);
+    };
+
+    SERVICE.nextLevel(req, METADATA, processResponse);
 }
