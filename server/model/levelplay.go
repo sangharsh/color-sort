@@ -15,8 +15,8 @@ func NewLevelPlay(level *pb.LevelState) *pb.LevelPlay {
 }
 
 func Pour(pourReq *pb.PourRequest, levelPlay *pb.LevelPlay) *pb.PourResponse {
-	success, err := pour(levelPlay.GetCurrentState(), int(pourReq.GetSrc()), int(pourReq.GetDst()))
-	if !success || err != nil {
+	numItemsPoured, err := pour(levelPlay.GetCurrentState(), int(pourReq.GetSrc()), int(pourReq.GetDst()))
+	if err != nil {
 		return &pb.PourResponse{
 			Status: &pb.PourResponse_Err{
 				Err: err.Error(),
@@ -28,7 +28,7 @@ func Pour(pourReq *pb.PourRequest, levelPlay *pb.LevelPlay) *pb.PourResponse {
 	pourRes := &pb.PourSuccessResponse{
 		Src:            pourReq.GetSrc(),
 		Dst:            pourReq.GetDst(),
-		NumItemsPoured: 1, // Functionality is limited to 1 right now
+		NumItemsPoured: int32(numItemsPoured),
 	}
 
 	levelPlay.Moves = append(levelPlay.Moves, pourRes)
@@ -46,8 +46,8 @@ func Undo(undoReq *pb.UndoRequest, levelPlay *pb.LevelPlay) (*pb.LevelState, err
 		return nil, errors.New("no moves to undo")
 	}
 	lastMove := moves[len(moves)-1]
-	success, err := undo(levelPlay.GetCurrentState(), lastMove)
-	if err != nil || !success {
+	_, err := undo(levelPlay.GetCurrentState(), lastMove)
+	if err != nil {
 		return nil, err
 	}
 	levelPlay.Moves = moves[:len(moves)-1]
