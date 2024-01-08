@@ -3,7 +3,7 @@
 import './styles.css';
 
 import { useState, useEffect } from 'react';
-import { NewLevel, Pour, Reset, Undo } from './service';
+import { GetLevel, Pour, Reset, Undo, Next } from './service';
 
 export default function Page() {
     return (
@@ -29,7 +29,7 @@ function Game() {
     }
 
     useEffect(() => {
-        NewLevel(1, setGame);
+        GetLevel(setGame);
     }, []);
 
     if (game && game.getTubesList) {
@@ -40,13 +40,17 @@ function Game() {
 
     return (
         <div className="container">
-            <h1>Level {game.getId ? game.getId() : ""}</h1>
+            <h1>Level {game != null && game.getId ? game.getId() : ""}</h1>
             {
-                game.getWon && game.getWon() ?
+                game && game.getWon && game.getWon() ?
                     (<p>Won!!</p>) : (<p></p>)
             }
+            <p>
+                <NextLevelButton setGame={setGame} />
+                <UndoButton setGame={setGame} />
+            </p>
             {renderedTubes}
-        </div>
+        </div >
     )
 }
 
@@ -66,4 +70,16 @@ function Tube({ tube, tubeIndex, selected, handleTubeSelection }) {
 
 function TubeColor({ color }) {
     return (<div className={`liquid liquid-${color}`}></div>)
+}
+
+function NextLevelButton({ setGame }) {
+    return (
+        <button onClick={e => Next(setGame)}>Next</button>
+    )
+}
+
+function UndoButton({ setGame }) {
+    return (
+        <button onClick={e => Undo(setGame)}>Undo</button>
+    )
 }
