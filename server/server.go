@@ -25,39 +25,52 @@ type ColorSortApiServer struct {
 	pb.UnimplementedColorSortApiServer
 }
 
-func getLevelPlayFromDb(ctx context.Context) (string, *pb.LevelPlay, error) {
+func getUserFromDb(ctx context.Context) (string, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return "", nil, errors.New("unable to read context")
+		return "", errors.New("unable to read context")
 	}
 	userId := md["colorsort-userid"][0]
 	if userId == "" {
-		return "", nil, errors.New("userId not found in request")
+		return "", errors.New("userId not found in request")
 	}
-	levelPlay := db.Get(userId)
+	return userId, nil
+}
 
-	if levelPlay == nil {
-		return "", nil, errors.New("levelPlay not found for user")
+func getLevelPlayFromDb(userId string) *pb.LevelPlay {
+	return db.Get(userId)
+}
+
+func getUserAndLevelFromDb(ctx context.Context) (string, *pb.LevelPlay, error) {
+	userId, err := getUserFromDb(ctx)
+	if err != nil {
+		return "", nil, err
 	}
+	levelPlay := getLevelPlayFromDb(userId)
 	return userId, levelPlay, nil
 }
 
-func (server *ColorSortApiServer) NewLevel(ctx context.Context, req *pb.NewLevelPlayRequest) (*pb.LevelState, error) {
+func (server *ColorSortApiServer) GetLevel(ctx context.Context, req *pb.GetLevelRequest) (*pb.LevelState, error) {
 	log.Printf("Entry: \nreq: %v", req.String())
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return nil, errors.New("unable to read context")
+	userId, levelPlay, err := getUserAndLevelFromDb(ctx)
+	if err != nil {
+		return nil, err
 	}
-	userId := md["colorsort-userid"][0]
-	level := level.Generate(req.GetId())
-	levelPlay := model.NewLevelPlay(level)
-	db.Set(userId, levelPlay)
+
+	if levelPlay != nil {
 	return levelPlay.GetCurrentState(), nil
+	}
+
+	levelId := int32(1)
+	level := level.Generate(levelId)
+	levelPlayNew := model.NewLevelPlay(level)
+	db.Set(userId, levelPlayNew)
+	return levelPlayNew.GetCurrentState(), nil
 }
 
 func (server *ColorSortApiServer) Pour(ctx context.Context, req *pb.PourRequest) (*pb.PourResponse, error) {
 	log.Printf("Entry: \nreq: %v", req.String())
-	_, levelPlay, err := getLevelPlayFromDb(ctx)
+	_, levelPlay, err := getUserAndLevelFromDb(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +78,8 @@ func (server *ColorSortApiServer) Pour(ctx context.Context, req *pb.PourRequest)
 }
 
 func (server *ColorSortApiServer) Reset(ctx context.Context, req *pb.ResetRequest) (*pb.LevelState, error) {
-	log.Printf("Entry: \nreq: %v", req.String())
-	userId, levelPlay, err := getLevelPlayFromDb(ctx)
+	log.Printf("Reset: \nreq: %v", req.String())
+	userId, levelPlay, err := getUserAndLevelFromDb(ctx)
 	if err != nil {
 		return nil, err
 	}
