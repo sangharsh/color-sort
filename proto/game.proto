@@ -41,7 +41,7 @@ message LevelPlay {
     LevelState currentState = 3;
 }
 
-message NewLevelPlayRequest {
+message GetLevelRequest {
     int32 id = 1;
 }
 
@@ -66,10 +66,12 @@ message PourResponse {
 
 message ResetRequest {}
 message UndoRequest {}
+message NextLevelRequest {}
 
 service ColorSortApi {
-    rpc NewLevel(NewLevelPlayRequest) returns (LevelState) {} // Get new level
+    rpc GetLevel(GetLevelRequest) returns (LevelState) {} // Get current level
     rpc Pour(PourRequest) returns (PourResponse) {} // Try a move
     rpc Reset(ResetRequest) returns (LevelState) {} // Go to initial state of the level
     rpc Undo(UndoRequest) returns (LevelState) {} // Undo last move
+    rpc NextLevel(NextLevelRequest) returns (LevelState) {} // Get next level
 }

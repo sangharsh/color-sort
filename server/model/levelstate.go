@@ -20,8 +20,7 @@ func NewLevel(levelId int32, tubes []*pb.Testtube) *pb.LevelState {
 
 type addFn func(*pb.Testtube, pb.Color) error
 
-// TODO: Moves only a single item right now
-func move(from *pb.Testtube, to *pb.Testtube, fn addFn) (bool, error) {
+func moveOne(from *pb.Testtube, to *pb.Testtube, fn addFn) (bool, error) {
 	color, err := peek(from)
 	if err != nil {
 		return false, err
@@ -38,29 +37,42 @@ func move(from *pb.Testtube, to *pb.Testtube, fn addFn) (bool, error) {
 	return true, nil
 }
 
-// TODO: Pours only a single item right now
-func pour(level *pb.LevelState, srcidx int, dstidx int) (bool, error) {
+func move(from *pb.Testtube, to *pb.Testtube, maxItems int, fn addFn) (int, error) {
+	numItemsPoured := 0
+	ok, err := moveOne(from, to, fn)
+	if !ok || err != nil {
+		return numItemsPoured, err
+	}
+
+	for ok && numItemsPoured < maxItems {
+		numItemsPoured += 1
+		ok, _ = moveOne(from, to, fn)
+	}
+	return numItemsPoured, nil
+}
+
+func pour(level *pb.LevelState, srcidx int, dstidx int) (int, error) {
 	if level.Won {
-		return false, errors.New("level has been won")
+		return 0, errors.New("level has been won")
 	}
 	src := level.Tubes[srcidx]
 	dst := level.Tubes[dstidx]
-	ok, err := move(src, dst, addColor)
-	if !ok || err != nil {
-		return ok, err
+	numItemsPoured, err := move(src, dst, len(src.GetColors()), addColor)
+	if err != nil {
+		return numItemsPoured, err
 	}
 	level.Won = won(level)
-	return true, nil
+	return numItemsPoured, nil
 }
 
-func undo(level *pb.LevelState, moveResp *pb.PourSuccessResponse) (bool, error) {
+func undo(level *pb.LevelState, moveResp *pb.PourSuccessResponse) (int, error) {
 	if level.Won {
-		return false, errors.New("level has been won")
+		return 0, errors.New("level has been won")
 	}
 	src := level.Tubes[moveResp.GetSrc()]
 	dst := level.Tubes[moveResp.GetDst()]
-	// TODO: numItemsPoured := move.GetNumItemsPoured()
-	return move(dst, src, forceAddColor)
+	numItemsPoured := moveResp.GetNumItemsPoured()
+	return move(dst, src, int(numItemsPoured), forceAddColor)
 }
 
 func won(level *pb.LevelState) bool {
