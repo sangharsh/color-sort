@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"errors"
-	"flag"
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"strconv"
 
 	"github.com/sangharsh/color-sort/db"
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
@@ -15,10 +16,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
-)
-
-var (
-	port = flag.Int("port", 50051, "The server port")
 )
 
 type ColorSortApiServer struct {
@@ -113,9 +110,22 @@ func (server *ColorSortApiServer) NextLevel(ctx context.Context, req *pb.NextLev
 	return levelPlayNew.GetCurrentState(), nil
 }
 
+func getPort() int {
+	portStr, ok := os.LookupEnv("PORT")
+	if !ok {
+		portStr = "50051"
+	}
+	port, err := strconv.Atoi(portStr)
+	if err != nil {
+		port = 50051
+	}
+	return port
+}
+
 func main() {
-	flag.Parse()
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))
+	port := getPort()
+	log.Printf("Starting server at port %v", port)
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
