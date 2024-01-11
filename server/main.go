@@ -9,6 +9,8 @@ import (
 
 	"github.com/sangharsh/color-sort/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/health"
+	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
 )
 
@@ -36,5 +38,9 @@ func main() {
 	api.Register(grpcServer)
 	// Register reflection service on gRPC server.
 	reflection.Register(grpcServer)
+
+	healthcheck := health.NewServer()
+	healthpb.RegisterHealthServer(grpcServer, healthcheck)
+	healthcheck.SetServingStatus("", healthpb.HealthCheckResponse_SERVING)
 	grpcServer.Serve(lis)
 }
