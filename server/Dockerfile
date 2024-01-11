@@ -2,14 +2,11 @@
 FROM golang:alpine3.19 as build
 
 WORKDIR /go-server
-
+ENV HOST 0.0.0.0
 COPY proto/game.proto ./proto/
 COPY server/go.mod .
 COPY server/go.sum .
-COPY server/db/*.go ./db/
-COPY server/level/*.go ./level/
-COPY server/model/*.go ./model/
-COPY server/server.go ./
+COPY server/ ./
 
 # Installs protoc and required plugin
 RUN apk add --no-cache protoc && \
@@ -40,5 +37,5 @@ RUN CGO_ENABLED=0 GOOS=linux \
 FROM golang:alpine3.19
 
 COPY --from=build /go/bin/server /server
-EXPOSE 50051
+ENV HOST 0.0.0.0
 ENTRYPOINT ["/server"]
