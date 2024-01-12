@@ -9,7 +9,7 @@ COPY server/go.sum .
 COPY server/ ./
 
 # Installs protoc and required plugin
-RUN apk add --no-cache protoc && \
+RUN apk add protoc && \
     go get -u google.golang.org/protobuf/cmd/protoc-gen-go && \
     go install google.golang.org/protobuf/cmd/protoc-gen-go && \
     go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc && \
