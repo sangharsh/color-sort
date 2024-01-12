@@ -27,3 +27,5 @@ go.work
 # Node.js, React, Nextjs ignore files 
 node_modules/
 .next/
+
+.vscode/

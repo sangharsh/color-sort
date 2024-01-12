@@ -1,0 +1,13 @@
+services:
+  client:
+    image: client
+    ports:
+      - "3000:3000"
+  proxy:
+    image: proxy
+    ports:
+      - "8080:8080"
+  server:
+    image: server
+    ports:
+      - "50051:50051"
