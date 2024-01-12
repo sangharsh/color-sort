@@ -34,7 +34,7 @@ RUN CGO_ENABLED=0 GOOS=linux \
     github.com/sangharsh/color-sort
 
 
-FROM golang:alpine3.19
+FROM scratch
 
 COPY --from=build /go/bin/server /server
 ENV HOST 0.0.0.0
