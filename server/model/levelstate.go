@@ -38,15 +38,16 @@ func moveOne(from *pb.Testtube, to *pb.Testtube, fn addFn) (bool, error) {
 }
 
 func move(from *pb.Testtube, to *pb.Testtube, maxItems int, fn addFn) (int, error) {
-	numItemsPoured := 0
 	ok, err := moveOne(from, to, fn)
 	if !ok || err != nil {
-		return numItemsPoured, err
+		return 0, err
 	}
-
+	numItemsPoured := 1
 	for ok && numItemsPoured < maxItems {
-		numItemsPoured += 1
 		ok, _ = moveOne(from, to, fn)
+		if ok {
+			numItemsPoured += 1
+		}
 	}
 	return numItemsPoured, nil
 }
