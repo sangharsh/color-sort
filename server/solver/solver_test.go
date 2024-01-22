@@ -19,6 +19,7 @@ func TestRandomSolveSuccess(t *testing.T) {
 	if !levelPlay.GetCurrentState().GetWon() {
 		t.Logf(`Game not won. Level: %v`, levelPlay.GetCurrentState().String())
 	}
+	t.Logf("Level: %v, NumMoves: %v", levelPlay.CurrentState.Id, len(levelPlay.Moves))
 }
 
 func TestBFSolver(t *testing.T) {
@@ -33,8 +34,9 @@ func TestBFSolver(t *testing.T) {
 	if !levelPlay.GetCurrentState().GetWon() {
 		t.Fatalf(`Game not won. Level: %v`, levelPlay.GetCurrentState().String())
 	} else {
-		t.Logf("LevelPlay: %v", levelPlay)
-		t.Logf("Moves: %v", MovesString(levelPlay))
+		// t.Logf("LevelPlay: %v", levelPlay)
+		// t.Logf("Moves: %v", MovesString(levelPlay))
+		t.Logf("Level: %v, NumMoves: %v", levelPlay.CurrentState.Id, len(levelPlay.Moves))
 	}
 }
 
@@ -48,7 +50,25 @@ func TestDFSolver(t *testing.T) {
 	if !levelPlay.GetCurrentState().GetWon() {
 		t.Fatalf(`Game not won. Level: %v`, levelPlay.GetCurrentState().String())
 	} else {
-		t.Logf("LevelPlay: %v", levelPlay)
+		// t.Logf("LevelPlay: %v", levelPlay)
+		// t.Logf("Moves: %v", MovesString(levelPlay))
+		t.Logf("Level: %v, NumMoves: %v", levelPlay.CurrentState.Id, len(levelPlay.Moves))
+	}
+}
+
+func TestGreedySolver(t *testing.T) {
+
+	level := level.Generate(2)
+
+	solver := NewGreedySolver(level)
+	levelPlay := solver.Solve()
+
+	if !levelPlay.GetCurrentState().GetWon() {
+		t.Fatalf(`Game not won. Level: %v`, levelPlay.GetCurrentState().String())
+	} else {
+		t.Logf("Level: %v, NumMoves: %v", levelPlay.CurrentState.Id, len(levelPlay.Moves))
+		// t.Logf("LevelPlay: %v", levelPlay)
 		t.Logf("Moves: %v", MovesString(levelPlay))
+
 	}
 }

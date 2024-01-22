@@ -6,23 +6,19 @@ import (
 )
 
 type DFSSolver struct {
-	initialLevelState *pb.LevelState
-	visited           map[string]bool
+	initialState *pb.LevelState
+	visited      map[string]bool
 }
 
 func NewDFSSolver(levelState *pb.LevelState) *DFSSolver {
 	s := new(DFSSolver)
-	s.initialLevelState = levelState
+	s.initialState = levelState
 	s.visited = make(map[string]bool)
 	return s
 }
 
-func (s DFSSolver) Initial() *pb.LevelState {
-	return s.initialLevelState
-}
-
 func (s DFSSolver) Solve() *pb.LevelPlay {
-	levelState := s.Initial()
+	levelState := s.initialState
 	levelPlay := model.NewLevelPlay(levelState)
 	s.solve2(levelPlay)
 	return levelPlay

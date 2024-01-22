@@ -1,7 +1,6 @@
 package solver
 
 import (
-	"log"
 	"math/rand"
 	"time"
 
@@ -36,7 +35,6 @@ func oneMove(levelPlay *pb.LevelPlay) {
 			}
 			pourRes = model.Pour(&pourReq, levelPlay)
 			if pourRes.GetErr() == "" {
-				log.Printf("Move: src:%v, dst:%v\n", src, dst)
 				break
 			}
 		}
