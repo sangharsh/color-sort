@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"fmt"
 
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
 )
@@ -83,4 +84,27 @@ func won(level *pb.LevelState) bool {
 		}
 	}
 	return true
+}
+
+func HasValidColorAndTubes(level *pb.LevelState) (bool, error) {
+	// Check for id and won field as well
+	tubes := level.GetTubes()
+	numTubes := len(tubes)
+	colorMap := make(map[pb.Color]int)
+
+	for _, tt := range tubes {
+		for _, color := range tt.GetColors() {
+			colorMap[color]++
+		}
+	}
+	if len(colorMap)+2 != numTubes {
+		return false, fmt.Errorf("no. of tubes(%v) is not numColor(%v) + 2", numTubes, len(colorMap))
+	}
+
+	for k, v := range colorMap {
+		if v != 4 {
+			return false, fmt.Errorf("no. of elements is not 4: %v", k)
+		}
+	}
+	return true, nil
 }
