@@ -7,26 +7,21 @@ import (
 )
 
 type BFSSolver struct {
-	initialLevelState *pb.LevelState
-	visited           map[string]bool
-	queue             []*pb.LevelPlay
+	initialState *pb.LevelState
+	visited      map[string]bool
+	queue        []*pb.LevelPlay
 }
 
 func NewBFSSolver(levelState *pb.LevelState) *BFSSolver {
 	s := new(BFSSolver)
-	s.initialLevelState = levelState
+	s.initialState = levelState
 	s.visited = make(map[string]bool)
 	s.queue = make([]*pb.LevelPlay, 0)
-
 	return s
 }
 
-func (s BFSSolver) Initial() *pb.LevelState {
-	return s.initialLevelState
-}
-
 func (s BFSSolver) Solve() *pb.LevelPlay {
-	levelState := s.Initial()
+	levelState := s.initialState
 	levelPlay := model.NewLevelPlay(levelState)
 	clone := proto.Clone(levelPlay).(*pb.LevelPlay)
 	s.queue = append(s.queue, clone)
@@ -37,7 +32,6 @@ func (s BFSSolver) solve2() *pb.LevelPlay {
 	movesTried := 0
 	statesTried := 0
 	for len(s.queue) > 0 {
-		// log.Printf("Moves tried: %v; States tried: %v", movesTried, statesTried)
 		levelPlay := s.queue[0]
 		s.queue = s.queue[1:]
 		AddToVisited(s.visited, levelPlay)
@@ -69,12 +63,10 @@ func (s BFSSolver) solve2() *pb.LevelPlay {
 					statesTried++
 					clone := proto.Clone(levelPlay).(*pb.LevelPlay)
 					s.queue = append(s.queue, clone)
-					// log.Printf("Queuing moves: %v", MovesString(clone))
 					model.Undo(&pb.UndoRequest{}, levelPlay)
 				}
 			}
 		}
 	}
-	// log.Printf("Moves tried: %v; States tried: %v", movesTried, statesTried)
 	return nil
 }

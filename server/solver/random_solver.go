@@ -9,6 +9,16 @@ import (
 	"github.com/sangharsh/color-sort/model"
 )
 
+type RandomSolver struct {
+	initialState *pb.LevelState
+}
+
+func NewRandomSolver(levelState *pb.LevelState) *RandomSolver {
+	s := new(RandomSolver)
+	s.initialState = levelState
+	return s
+}
+
 func oneMove(levelPlay *pb.LevelPlay) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	tubes := levelPlay.GetCurrentState().GetTubes()
@@ -41,10 +51,10 @@ func oneMove(levelPlay *pb.LevelPlay) {
 	}
 }
 
-func RandomSolve(levelPlay *pb.LevelPlay) {
-
-	// !levelPlay.GetCurrentState().GetWon()
+func (s RandomSolver) Solve() *pb.LevelPlay {
+	levelPlay := model.NewLevelPlay(s.initialState)
 	for i := 0; i < 50; i++ {
 		oneMove(levelPlay)
 	}
+	return levelPlay
 }

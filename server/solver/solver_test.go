@@ -13,9 +13,9 @@ func TestRandomSolveSuccess(t *testing.T) {
 		model.NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_RED, pb.Color_GREEN}),
 		model.NewTesttube(4, []pb.Color{pb.Color_RED, pb.Color_GREEN, pb.Color_RED, pb.Color_GREEN}),
 	})
-	levelPlay := model.NewLevelPlay(level)
 
-	RandomSolve(levelPlay)
+	solver := NewRandomSolver(level)
+	levelPlay := solver.Solve()
 	if !levelPlay.GetCurrentState().GetWon() {
 		t.Logf(`Game not won. Level: %v`, levelPlay.GetCurrentState().String())
 	}
