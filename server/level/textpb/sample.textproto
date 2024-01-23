@@ -1,0 +1,17 @@
+id: 1
+tubes: {
+  size: 4
+  colors: RED
+  colors: GREEN
+  colors: RED
+  colors: GREEN
+}
+tubes: {
+  size: 4
+  colors: RED
+  colors: GREEN
+  colors: GREEN
+  colors: RED
+}
+tubes: { size: 4 }
+tubes: { size: 4 }

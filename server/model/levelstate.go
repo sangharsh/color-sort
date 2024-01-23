@@ -2,6 +2,7 @@ package model
 
 import (
 	"errors"
+	"fmt"
 
 	pb "github.com/sangharsh/color-sort/gen/modelpb"
 )
@@ -38,15 +39,16 @@ func moveOne(from *pb.Testtube, to *pb.Testtube, fn addFn) (bool, error) {
 }
 
 func move(from *pb.Testtube, to *pb.Testtube, maxItems int, fn addFn) (int, error) {
-	numItemsPoured := 0
 	ok, err := moveOne(from, to, fn)
 	if !ok || err != nil {
-		return numItemsPoured, err
+		return 0, err
 	}
-
+	numItemsPoured := 1
 	for ok && numItemsPoured < maxItems {
-		numItemsPoured += 1
 		ok, _ = moveOne(from, to, fn)
+		if ok {
+			numItemsPoured += 1
+		}
 	}
 	return numItemsPoured, nil
 }
@@ -82,4 +84,27 @@ func won(level *pb.LevelState) bool {
 		}
 	}
 	return true
+}
+
+func HasValidColorAndTubes(level *pb.LevelState) (bool, error) {
+	// Check for id and won field as well
+	tubes := level.GetTubes()
+	numTubes := len(tubes)
+	colorMap := make(map[pb.Color]int)
+
+	for _, tt := range tubes {
+		for _, color := range tt.GetColors() {
+			colorMap[color]++
+		}
+	}
+	if len(colorMap)+2 != numTubes {
+		return false, fmt.Errorf("no. of tubes(%v) is not numColor(%v) + 2", numTubes, len(colorMap))
+	}
+
+	for k, v := range colorMap {
+		if v != 4 {
+			return false, fmt.Errorf("no. of elements is not 4: %v", k)
+		}
+	}
+	return true, nil
 }
