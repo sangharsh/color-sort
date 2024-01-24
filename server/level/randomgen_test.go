@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"testing"
 
-	pb "github.com/sangharsh/color-sort/gen/modelpb"
+	"github.com/sangharsh/color-sort/model"
 )
 
 func TestLevelNumber(t *testing.T) {
@@ -19,24 +19,8 @@ func TestLevelNumber(t *testing.T) {
 
 func TestTubesAndColors(t *testing.T) {
 	level := Generate(rand.Int31())
-	tubes := level.GetTubes()
-	colorCountMap := make(map[pb.Color]int)
-
-	for i := 0; i < len(tubes); i++ {
-		colors := tubes[i].GetColors()
-		for j := 0; j < len(colors); j++ {
-			colorCountMap[colors[j]] = colorCountMap[colors[j]] + 1
-		}
+	ok, err := model.HasValidColorAndTubes(level)
+	if !ok || err != nil {
+		t.Fatalf("Number of tubes or colors not matching. \nLevel: %v", level)
 	}
-
-	if len(tubes) != len(colorCountMap)+2 {
-		t.Fatalf("Number of tubes and colors not matching. \nLevel: %v", level)
-	}
-
-	for color, count := range colorCountMap {
-		if count != 4 {
-			t.Fatalf("Count is not 4 for color %v, \nLevel: %v", color, level)
-		}
-	}
-
 }

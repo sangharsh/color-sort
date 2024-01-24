@@ -10,13 +10,19 @@ import (
 type GreedySolver struct {
 	initialState *pb.LevelState
 	visited      map[string]bool
+	stats        *SolverStat
 }
 
 func NewGreedySolver(levelState *pb.LevelState) *GreedySolver {
 	s := new(GreedySolver)
 	s.initialState = levelState
 	s.visited = make(map[string]bool)
+	s.stats = new(SolverStat)
 	return s
+}
+
+func (s GreedySolver) Stats() *SolverStat {
+	return s.stats
 }
 
 func (s GreedySolver) Solve() *pb.LevelPlay {
@@ -81,11 +87,13 @@ func (s GreedySolver) solve2(levelPlay *pb.LevelPlay) {
 		if pourRes.GetErr() != "" {
 			continue
 		} else {
+			s.stats.pourCount += 1
 			s.solve2(levelPlay)
 			if levelPlay.GetCurrentState().GetWon() {
 				return
 			}
 			model.Undo(&pb.UndoRequest{}, levelPlay)
+			s.stats.undoCount += 1
 		}
 	}
 }
