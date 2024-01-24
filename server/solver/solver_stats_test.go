@@ -24,7 +24,6 @@ func TestGreedySolverStats(t *testing.T) {
 				levelId, numColors, numMoves,
 				solver.Stats().pourCount, solver.Stats().undoCount,
 				numMoves-3*numColors, float32(numMoves)/float32(numColors))
-			// t.Logf("Level: %v,\tColors: %v,\tNumMoves: %v,\tExtraMoves,\tEfficiency: %v\t%v", levelId, numColors, numMoves, numMoves-3*numColors, float32(numMoves)/float32(numColors))
 		}
 	}
 }
